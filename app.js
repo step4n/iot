@@ -12,15 +12,99 @@ const DEFAULT_CONFIG = {
   skipCost: 30,
 };
 
+const STYLE_SHOP_CONFIG = {
+  directUnlockCost: 40,
+  randomSpinStarCost: 15,
+  randomSpinTokenCost: 1,
+  tokenMilestone: 3,
+};
+
+const AVATAR_SHOP_CONFIG = {
+  directUnlockCost: 30,
+  randomSpinCost: 12,
+};
+
 const PREVIEW_ALLOW_ANY_PIN = false;
 const REQUIRE_LECTURER_PIN_FOR_CHECK = false;
 
 const LEVEL_BADGES = [
-  { id: "prvni-led", label: "PRVNI LED", icon: "🏆" },
-  { id: "iot-mag", label: "IOT MAG", icon: "🎖" },
-  { id: "architekt", label: "ARCHITEKT", icon: "🏵" },
-  { id: "expert", label: "EXPERT", icon: "✦" },
+  { id: "prvni-led", label: "PRVNI LED", icon: "&#127942;" },
+  { id: "iot-mag", label: "IOT MAG", icon: "&#127894;" },
+  { id: "architekt", label: "ARCHITEKT", icon: "&#127989;" },
+  { id: "expert", label: "EXPERT", icon: "&#10022;" },
 ];
+
+const STYLE_OPTIONS = [
+  {
+    id: "classic",
+    label: "Classic",
+    description: "Puvodni vzhled screenu.",
+    accent: "blue",
+    unlockType: "default",
+  },
+  {
+    id: "sunrise",
+    label: "Sunrise",
+    description: "Teplejsi barvy a svetlejsi akcenty.",
+    accent: "orange",
+    unlockType: "shop",
+  },
+  {
+    id: "forest",
+    label: "Forest",
+    description: "Zelenejsi laboratorni styl.",
+    accent: "green",
+    unlockType: "shop",
+  },
+  {
+    id: "ice",
+    label: "Ice",
+    description: "Chladny modry styl s ostrejsimi kontrasty.",
+    accent: "cyan",
+    unlockType: "shop",
+  },
+];
+
+const AVATAR_OPTIONS = [
+  { id: "fox", label: "Fox / Purple", src: "./assets/avatar-icons/fox-purple.png", unlockType: "default" },
+  { id: "bichon", label: "Bichon / Brown", src: "./assets/avatar-icons/bichon-brown.png", unlockType: "shop" },
+  { id: "bull-terrier", label: "Bull Terrier / Blue", src: "./assets/avatar-icons/bull-terrier-blue.png", unlockType: "shop" },
+  { id: "sloth", label: "Sloth / Blue", src: "./assets/avatar-icons/sloth-blue.png", unlockType: "shop" },
+  { id: "weasel", label: "Weasel / Brown", src: "./assets/avatar-icons/weasel-brown.png", unlockType: "shop" },
+  { id: "avatar-1005344", label: "Rhino / Red", src: "./assets/avatar-icons/rhino-red.png", unlockType: "shop" },
+  { id: "avatar-1005362", label: "Koala / Brown", src: "./assets/avatar-icons/koala-brown.png", unlockType: "shop" },
+  { id: "avatar-1326378-1", label: "Alpaca / Brown", src: "./assets/avatar-icons/alpaca-brown.png", unlockType: "shop" },
+  { id: "avatar-1326378", label: "Alpaca / Red", src: "./assets/avatar-icons/alpaca-red.png", unlockType: "shop" },
+  { id: "avatar-1326383", label: "Lion / Green", src: "./assets/avatar-icons/lion-green.png", unlockType: "shop" },
+  { id: "avatar-1759412", label: "Cow / Brown", src: "./assets/avatar-icons/cow-brown.png", unlockType: "shop" },
+  { id: "avatar-1805836", label: "Horse / Red", src: "./assets/avatar-icons/horse-red.png", unlockType: "shop" },
+  { id: "avatar-1805874", label: "Beaver / Green", src: "./assets/avatar-icons/beaver-green.png", unlockType: "shop" },
+  { id: "avatar-2319674", label: "Zebra / Brown", src: "./assets/avatar-icons/zebra-brown.png", unlockType: "shop" },
+  { id: "avatar-2829735", label: "Dog / Blue", src: "./assets/avatar-icons/dog-blue.png", unlockType: "shop" },
+  { id: "avatar-2911967", label: "Hippo / Blue", src: "./assets/avatar-icons/hippo-blue.png", unlockType: "shop" },
+  { id: "avatar-3309340", label: "Hippo / Brown", src: "./assets/avatar-icons/hippo-brown.png", unlockType: "shop" },
+  { id: "avatar-3700537", label: "Camel / Green", src: "./assets/avatar-icons/camel-green.png", unlockType: "shop" },
+  { id: "avatar-3798958", label: "Giraffe / Blue", src: "./assets/avatar-icons/giraffe-blue.png", unlockType: "shop" },
+  { id: "avatar-3940412", label: "Sheep / Red", src: "./assets/avatar-icons/sheep-red.png", unlockType: "shop" },
+  { id: "avatar-3940422", label: "Pig / Blue", src: "./assets/avatar-icons/pig-blue.png", unlockType: "shop" },
+  { id: "avatar-414696", label: "Duck / Blue", src: "./assets/avatar-icons/duck-blue.png", unlockType: "shop" },
+  { id: "avatar-414718", label: "Raccoon / Red", src: "./assets/avatar-icons/raccoon-red.png", unlockType: "shop" },
+  { id: "avatar-4775627", label: "Sloth Face / Blue", src: "./assets/avatar-icons/sloth-face-blue.png", unlockType: "shop" },
+  { id: "avatar-4905476", label: "Spider / Brown", src: "./assets/avatar-icons/spider-brown.png", unlockType: "shop" },
+  { id: "avatar-5094303", label: "Dog / Green", src: "./assets/avatar-icons/dog-green.png", unlockType: "shop" },
+  { id: "avatar-5138246", label: "Pig / Green", src: "./assets/avatar-icons/pig-green.png", unlockType: "shop" },
+  { id: "avatar-5266855", label: "Llama / Blue", src: "./assets/avatar-icons/llama-blue.png", unlockType: "shop" },
+  { id: "avatar-6359353", label: "Snowman / Purple", src: "./assets/avatar-icons/snowman-purple.png", unlockType: "shop" },
+  { id: "avatar-6359394", label: "Bellhop / Purple", src: "./assets/avatar-icons/bellhop-purple.png", unlockType: "shop" },
+  { id: "avatar-6359529", label: "Koala / Purple", src: "./assets/avatar-icons/koala-purple.png", unlockType: "shop" },
+  { id: "avatar-6359544", label: "Sheep / Purple", src: "./assets/avatar-icons/sheep-purple.png", unlockType: "shop" },
+  { id: "avatar-6359560", label: "Reindeer / Purple", src: "./assets/avatar-icons/reindeer-purple.png", unlockType: "shop" },
+  { id: "avatar-6359569", label: "Kid / Purple", src: "./assets/avatar-icons/kid-purple.png", unlockType: "shop" },
+  { id: "avatar-6359640", label: "Bear / Purple", src: "./assets/avatar-icons/bear-purple.png", unlockType: "shop" },
+  { id: "avatar-6359663", label: "Kid / Winter Purple", src: "./assets/avatar-icons/kid-winter-purple.png", unlockType: "shop" },
+];
+
+const DEFAULT_AVATAR_ID = AVATAR_OPTIONS[0]?.id ?? "fox";
 
 const TASK_SOLUTIONS = {
   "beginner-led": `// C++ code
@@ -515,12 +599,51 @@ void loop()
 }`,
 };
 
+const TASK_IMAGE_CONFIG = {
+  "beginner-led": {
+    src: "./assets/led.png",
+    alt: "LED - prezentacni screenshot zapojeni a bloku",
+  },
+  "beginner-potentiometer": {
+    src: "./assets/potenciometr.png",
+    alt: "Potenciometr - prezentacni screenshot zapojeni a bloku",
+  },
+  "beginner-and-or": {
+    src: "./assets/and-or.png",
+    alt: "AND - OR - prezentacni screenshot zapojeni a bloku",
+  },
+  "beginner-traffic-light": {
+    src: "./assets/semafor.png",
+    alt: "Semafor - prezentacni screenshot zapojeni a bloku",
+  },
+  "advanced-parking": {
+    src: "./assets/parkovaci-system.png",
+    alt: "Parkovaci system - prezentacni screenshot zapojeni a bloku",
+  },
+  "advanced-motion": {
+    src: "./assets/detekce-pohybu.png",
+    alt: "Detekce pohybu - prezentacni screenshot zapojeni",
+  },
+  "expert-servo": {
+    src: "./assets/servo-motor.png",
+    alt: "Servo motor - prezentacni screenshot zapojeni a bloku",
+  },
+  "expert-servo-loop": {
+    src: "./assets/loop-servo.png",
+    alt: "Loop servo - prezentacni screenshot zapojeni a bloku",
+  },
+  "expert-rgb-loop": {
+    src: "./assets/loop-rgb.png",
+    alt: "Loop RGB - prezentacni screenshot zapojeni a bloku",
+  },
+};
+
 const legacySections = [
   {
     id: "beginner",
     title: "Zacatecnik",
     subtitle: "Zaklady sveta IoT",
-    icon: "🔑",
+    icon: "&#128273;",
     accent: "green",
     tasks: [
       {
@@ -550,7 +673,7 @@ const legacySections = [
     id: "advanced",
     title: "Pokrocily",
     subtitle: "Propojovani systemu",
-    icon: "⚙",
+    icon: "&#9881;",
     accent: "amber",
     tasks: [
       {
@@ -580,7 +703,7 @@ const legacySections = [
     id: "expert",
     title: "Expert",
     subtitle: "Profesionalni hardware",
-    icon: "🚀",
+    icon: "&#128640;",
     accent: "purple",
     tasks: [
       {
@@ -613,7 +736,7 @@ const sections = [
     id: "beginner",
     title: "Zacatecnik",
     subtitle: "Zaklady Arduino a prvni logika",
-    icon: "🔑",
+    icon: "&#128273;",
     accent: "green",
     tasks: [
       {
@@ -753,7 +876,7 @@ const sections = [
     id: "advanced",
     title: "Pokrocily",
     subtitle: "Vetsi logika, senzory a realne scenare",
-    icon: "⚙",
+    icon: "&#9881;",
     accent: "amber",
     tasks: [
       {
@@ -894,7 +1017,7 @@ const sections = [
     id: "expert",
     title: "Expert",
     subtitle: "Plynuly pohyb, mapovani a herni logika",
-    icon: "🚀",
+    icon: "&#128640;",
     accent: "purple",
     tasks: [
       {
@@ -1083,6 +1206,19 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
+function normalizeEmail(email) {
+  return String(email ?? "").trim().toLowerCase();
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizeEmail(email));
+}
+
+function buildNicknameFromEmail(email) {
+  const localPart = normalizeEmail(email).split("@")[0] ?? "";
+  return (localPart || "student").slice(0, 20);
+}
+
 function hasAll(text, patterns) {
   return patterns.every((pattern) => text.includes(pattern));
 }
@@ -1139,12 +1275,22 @@ function createDefaultScreenState() {
     activeTaskId: null,
     activeHelpType: null,
     codeDrafts: {},
+    overviewTab: "styles",
+    styleShopOpen: false,
+    profileMenuOpen: false,
   };
 }
 
 function createDefaultAccountState() {
   return {
     stars: 20,
+    styleTokens: 0,
+    selectedStyleId: "classic",
+    unlockedStyleIds: ["classic"],
+    nickname: null,
+    selectedAvatarId: DEFAULT_AVATAR_ID,
+    unlockedAvatarIds: [DEFAULT_AVATAR_ID],
+    linkedEmail: null,
     taskState: createDefaultTaskState(),
     screenState: createDefaultScreenState(),
   };
@@ -1161,12 +1307,21 @@ function createIotCampScreen(container, options = {}) {
         configVersion: CONFIG_VERSION,
         config: { ...DEFAULT_CONFIG },
         accounts: {},
+        emailAccounts: {},
         authenticatedForDay: null,
         currentStudentNumber: null,
+        currentEmail: null,
         adminPanelOpen: false,
         adminAuthenticated: false,
         adminPreviewActive: false,
         stars: 20,
+        styleTokens: 0,
+        selectedStyleId: "classic",
+        unlockedStyleIds: ["classic"],
+        nickname: null,
+        selectedAvatarId: DEFAULT_AVATAR_ID,
+        unlockedAvatarIds: [DEFAULT_AVATAR_ID],
+        linkedEmail: null,
         taskState: createDefaultTaskState(),
         screenState: createDefaultScreenState(),
       };
@@ -1180,20 +1335,26 @@ function createIotCampScreen(container, options = {}) {
         ...(shouldResetConfig ? {} : (parsed.config ?? {})),
       };
       const accounts = shouldResetConfig ? {} : (parsed.accounts ?? {});
+      const emailAccounts = shouldResetConfig ? {} : (parsed.emailAccounts ?? {});
       const currentStudentNumber = shouldResetConfig ? null : (parsed.currentStudentNumber ?? null);
-      const currentAccount = currentStudentNumber && accounts[currentStudentNumber]
-        ? accounts[currentStudentNumber]
-        : createDefaultAccountState();
+      const currentEmail = shouldResetConfig ? null : normalizeEmail(parsed.currentEmail ?? "");
+      const currentAccount = currentEmail && emailAccounts[currentEmail]
+        ? emailAccounts[currentEmail]
+        : currentStudentNumber && accounts[currentStudentNumber]
+          ? accounts[currentStudentNumber]
+          : createDefaultAccountState();
 
       return {
         authenticatedForDay: shouldResetConfig ? null : (parsed.authenticatedForDay ?? null),
         currentStudentNumber,
+        currentEmail,
         adminPanelOpen: false,
         adminAuthenticated: false,
         adminPreviewActive: false,
         configVersion: CONFIG_VERSION,
         config,
         accounts,
+        emailAccounts,
         stars: Number.isFinite(currentAccount.stars)
           ? currentAccount.stars
           : Number.isFinite(parsed.stars)
@@ -1201,6 +1362,23 @@ function createIotCampScreen(container, options = {}) {
             : Number.isFinite(parsed.points)
               ? parsed.points
               : 20,
+        styleTokens: Number.isFinite(currentAccount.styleTokens)
+          ? currentAccount.styleTokens
+          : 0,
+        selectedStyleId: typeof currentAccount.selectedStyleId === "string"
+          ? currentAccount.selectedStyleId
+          : "classic",
+        unlockedStyleIds: Array.isArray(currentAccount.unlockedStyleIds) && currentAccount.unlockedStyleIds.length
+          ? currentAccount.unlockedStyleIds
+          : ["classic"],
+        nickname: typeof currentAccount.nickname === "string" ? currentAccount.nickname : null,
+        selectedAvatarId: typeof currentAccount.selectedAvatarId === "string"
+          ? currentAccount.selectedAvatarId
+          : DEFAULT_AVATAR_ID,
+        unlockedAvatarIds: Array.isArray(currentAccount.unlockedAvatarIds) && currentAccount.unlockedAvatarIds.length
+          ? currentAccount.unlockedAvatarIds
+          : [DEFAULT_AVATAR_ID],
+        linkedEmail: typeof currentAccount.linkedEmail === "string" ? normalizeEmail(currentAccount.linkedEmail) : null,
         taskState: {
           ...createDefaultTaskState(),
           ...(currentAccount.taskState ?? parsed.taskState ?? {}),
@@ -1215,12 +1393,21 @@ function createIotCampScreen(container, options = {}) {
         configVersion: CONFIG_VERSION,
         config: { ...DEFAULT_CONFIG },
         accounts: {},
+        emailAccounts: {},
         authenticatedForDay: null,
         currentStudentNumber: null,
+        currentEmail: null,
         adminPanelOpen: false,
         adminAuthenticated: false,
         adminPreviewActive: false,
         stars: 20,
+        styleTokens: 0,
+        selectedStyleId: "classic",
+        unlockedStyleIds: ["classic"],
+        nickname: null,
+        selectedAvatarId: DEFAULT_AVATAR_ID,
+        unlockedAvatarIds: [DEFAULT_AVATAR_ID],
+        linkedEmail: null,
         taskState: createDefaultTaskState(),
         screenState: createDefaultScreenState(),
       };
@@ -1275,16 +1462,66 @@ function createIotCampScreen(container, options = {}) {
   sanitizeScreenState();
   let toastTimer = null;
 
-  function commitCurrentAccount() {
-    if (!state.currentStudentNumber) {
-      return;
-    }
-
-    state.accounts[state.currentStudentNumber] = {
+  function buildCurrentAccountSnapshot() {
+    return {
       stars: state.stars,
+      styleTokens: state.styleTokens,
+      selectedStyleId: state.selectedStyleId,
+      unlockedStyleIds: state.unlockedStyleIds,
+      nickname: state.nickname,
+      selectedAvatarId: state.selectedAvatarId,
+      unlockedAvatarIds: state.unlockedAvatarIds,
+      linkedEmail: state.linkedEmail ?? null,
       taskState: state.taskState,
       screenState: state.screenState,
     };
+  }
+
+  function applyAccountSnapshot(account) {
+    const source = account ?? createDefaultAccountState();
+    state.stars = Number.isFinite(source.stars) ? source.stars : 20;
+    state.styleTokens = Number.isFinite(source.styleTokens) ? source.styleTokens : 0;
+    state.selectedStyleId = typeof source.selectedStyleId === "string" ? source.selectedStyleId : "classic";
+    state.unlockedStyleIds = Array.isArray(source.unlockedStyleIds) && source.unlockedStyleIds.length
+      ? source.unlockedStyleIds
+      : ["classic"];
+    state.nickname = typeof source.nickname === "string" ? source.nickname : null;
+    state.selectedAvatarId = typeof source.selectedAvatarId === "string" ? source.selectedAvatarId : DEFAULT_AVATAR_ID;
+    state.unlockedAvatarIds = Array.isArray(source.unlockedAvatarIds) && source.unlockedAvatarIds.length
+      ? source.unlockedAvatarIds
+      : [DEFAULT_AVATAR_ID];
+    state.linkedEmail = typeof source.linkedEmail === "string" ? normalizeEmail(source.linkedEmail) : null;
+    state.taskState = {
+      ...createDefaultTaskState(),
+      ...(source.taskState ?? {}),
+    };
+    state.screenState = {
+      ...createDefaultScreenState(),
+      ...(source.screenState ?? {}),
+    };
+    sanitizeLockedSectionProgress();
+    sanitizeScreenState();
+  }
+
+  function commitCurrentAccount() {
+    if (!state.currentStudentNumber && !state.currentEmail) {
+      return;
+    }
+
+    const snapshot = buildCurrentAccountSnapshot();
+
+    if (state.currentStudentNumber) {
+      state.accounts[state.currentStudentNumber] = snapshot;
+    }
+
+    const emailKey = state.currentEmail || state.linkedEmail;
+    if (emailKey && state.emailAccounts[emailKey]) {
+      state.emailAccounts[emailKey] = {
+        ...snapshot,
+        linkedEmail: emailKey,
+        password: state.emailAccounts[emailKey].password,
+      };
+    }
   }
 
   function saveState() {
@@ -1293,13 +1530,17 @@ function createIotCampScreen(container, options = {}) {
       configVersion: CONFIG_VERSION,
       config: state.config,
       accounts: state.accounts,
+      emailAccounts: state.emailAccounts,
       authenticatedForDay: state.authenticatedForDay,
       currentStudentNumber: state.currentStudentNumber,
+      currentEmail: state.currentEmail,
     }));
   }
 
   function isAuthenticated() {
-    return state.adminPreviewActive || (Boolean(state.currentStudentNumber) && state.authenticatedForDay === getTodayKey());
+    return state.adminPreviewActive
+      || Boolean(state.currentEmail)
+      || (Boolean(state.currentStudentNumber) && state.authenticatedForDay === getTodayKey());
   }
 
   function isAdminPreview() {
@@ -1309,17 +1550,81 @@ function createIotCampScreen(container, options = {}) {
   function loadAccount(studentNumber) {
     const storedAccount = state.accounts[studentNumber] ?? createDefaultAccountState();
     state.currentStudentNumber = studentNumber;
-    state.stars = storedAccount.stars;
-    state.taskState = {
-      ...createDefaultTaskState(),
-      ...(storedAccount.taskState ?? {}),
+    state.currentEmail = null;
+    applyAccountSnapshot(storedAccount);
+  }
+
+  function loadEmailAccount(email) {
+    const normalizedEmail = normalizeEmail(email);
+    const storedAccount = state.emailAccounts[normalizedEmail];
+
+    if (!storedAccount) {
+      return false;
+    }
+
+    state.currentEmail = normalizedEmail;
+    state.currentStudentNumber = null;
+    state.authenticatedForDay = null;
+    applyAccountSnapshot(storedAccount);
+    return true;
+  }
+
+  function linkAccountToEmail(email, password) {
+    const normalizedEmail = normalizeEmail(email);
+    const trimmedPassword = String(password ?? "").trim();
+
+    if (!normalizedEmail || !isValidEmail(normalizedEmail)) {
+      return { ok: false, message: "Zadej platny e-mail." };
+    }
+
+    if (trimmedPassword.length < 4) {
+      return { ok: false, message: "Heslo musi mit aspon 4 znaky." };
+    }
+
+    if (state.linkedEmail) {
+      return { ok: false, message: "Tento ucet uz ma propojeny e-mail a nejde prepsat." };
+    }
+
+    if (state.emailAccounts[normalizedEmail]) {
+      return { ok: false, message: "Tento e-mail uz je zaregistrovany a nejde pouzit znovu." };
+    }
+
+    const snapshot = {
+      ...buildCurrentAccountSnapshot(),
+      nickname: state.nickname ?? buildNicknameFromEmail(normalizedEmail),
+      linkedEmail: normalizedEmail,
+      password: trimmedPassword,
     };
-    state.screenState = {
-      ...createDefaultScreenState(),
-      ...(storedAccount.screenState ?? {}),
-    };
-    sanitizeLockedSectionProgress();
-    sanitizeScreenState();
+
+    state.linkedEmail = normalizedEmail;
+    state.nickname = snapshot.nickname;
+    state.emailAccounts[normalizedEmail] = snapshot;
+    saveState();
+    render();
+    return { ok: true, message: "Ucet byl propojen s e-mailem." };
+  }
+
+  function loginWithEmail(email, password) {
+    const normalizedEmail = normalizeEmail(email);
+    const trimmedPassword = String(password ?? "").trim();
+    const account = state.emailAccounts[normalizedEmail];
+
+    if (!normalizedEmail || !trimmedPassword) {
+      return { ok: false, message: "Zadej e-mail i heslo." };
+    }
+
+    if (!account) {
+      return { ok: false, message: "Tento e-mail neni zaregistrovany." };
+    }
+
+    if (account.password !== trimmedPassword) {
+      return { ok: false, message: "Heslo nesouhlasi." };
+    }
+
+    loadEmailAccount(normalizedEmail);
+    saveState();
+    render();
+    return { ok: true, message: "Prihlaseni pres e-mail bylo uspesne." };
   }
 
   function getTaskState(taskId) {
@@ -1355,6 +1660,10 @@ function createIotCampScreen(container, options = {}) {
     return sections.reduce((sum, _section, index) => sum + getTaskCounts(index).available, 0);
   }
 
+  function getVerifiedTaskCount(taskState = state.taskState) {
+    return getAllTasks().filter((task) => taskState?.[task.id]?.completionType === "verified").length;
+  }
+
   function getCompletedCountFromTaskState(taskState) {
     return getAllTasks().filter((task) => taskState?.[task.id]?.completed).length;
   }
@@ -1367,6 +1676,7 @@ function createIotCampScreen(container, options = {}) {
       const account = state.accounts[studentNumber] ?? createDefaultAccountState();
       const completed = getCompletedCountFromTaskState(account.taskState);
       const stars = Number.isFinite(account.stars) ? account.stars : 20;
+      const styleTokens = Number.isFinite(account.styleTokens) ? account.styleTokens : 0;
       const percent = totalTasks ? Math.round((completed / totalTasks) * 100) : 0;
 
       return {
@@ -1374,9 +1684,219 @@ function createIotCampScreen(container, options = {}) {
         completed,
         totalTasks,
         stars,
+        styleTokens,
         percent,
       };
     });
+  }
+
+  function getSelectedStyle() {
+    return STYLE_OPTIONS.find((style) => style.id === state.selectedStyleId) ?? STYLE_OPTIONS[0];
+  }
+
+  function getSelectedAvatar() {
+    const fallbackAvatar = AVATAR_OPTIONS[0];
+    const selectedAvatar = AVATAR_OPTIONS.find((avatar) => avatar.id === state.selectedAvatarId);
+    return selectedAvatar ?? fallbackAvatar;
+  }
+
+  function getUnlockedStyleIds() {
+    const ids = Array.isArray(state.unlockedStyleIds) ? state.unlockedStyleIds : ["classic"];
+    return Array.from(new Set(["classic", ...ids]));
+  }
+
+  function isStyleUnlocked(styleId) {
+    return getUnlockedStyleIds().includes(styleId);
+  }
+
+  function unlockStyle(styleId) {
+    state.unlockedStyleIds = Array.from(new Set([...getUnlockedStyleIds(), styleId]));
+  }
+
+  function getUnlockedAvatarIds() {
+    const validIds = new Set(AVATAR_OPTIONS.map((avatar) => avatar.id));
+    const ids = Array.isArray(state.unlockedAvatarIds) ? state.unlockedAvatarIds.filter((id) => validIds.has(id)) : [];
+    return Array.from(new Set([DEFAULT_AVATAR_ID, ...ids]));
+  }
+
+  function isAvatarUnlocked(avatarId) {
+    return getUnlockedAvatarIds().includes(avatarId);
+  }
+
+  function unlockAvatar(avatarId) {
+    state.unlockedAvatarIds = Array.from(new Set([...getUnlockedAvatarIds(), avatarId]));
+  }
+
+  function selectStyle(styleId) {
+    if (!isStyleUnlocked(styleId)) {
+      showMessage("Tento styl jeste nemas odemceny.");
+      return;
+    }
+
+    state.selectedStyleId = styleId;
+    saveState();
+    render();
+    showMessage("Styl byl aktivovan.", "success");
+  }
+
+  function buyStyle(styleId) {
+    const style = STYLE_OPTIONS.find((item) => item.id === styleId);
+
+    if (!style || style.unlockType !== "shop") {
+      showMessage("Tento styl ted nejde koupit.");
+      return;
+    }
+
+    if (isStyleUnlocked(styleId)) {
+      selectStyle(styleId);
+      return;
+    }
+
+    if (!hasEnoughStars(STYLE_SHOP_CONFIG.directUnlockCost)) {
+      showMessage("Nemas dost hvezdicek na odemceni stylu.");
+      return;
+    }
+
+    state.stars -= STYLE_SHOP_CONFIG.directUnlockCost;
+    unlockStyle(styleId);
+    state.selectedStyleId = styleId;
+    saveState();
+    render();
+    showMessage(`Styl ${style.label} byl odemceny.`, "success");
+  }
+
+  function spinRandomStyle() {
+    const lockedStyles = STYLE_OPTIONS.filter((style) => style.unlockType === "shop" && !isStyleUnlocked(style.id));
+
+    if (!lockedStyles.length) {
+      showMessage("Mas odemcene vsechny dostupne styly.");
+      return;
+    }
+
+    if (!hasEnoughStars(STYLE_SHOP_CONFIG.randomSpinStarCost) || state.styleTokens < STYLE_SHOP_CONFIG.randomSpinTokenCost) {
+      showMessage("Na vytoceni stylu potrebujes hvezdicky i token stylu.");
+      return;
+    }
+
+    state.stars -= STYLE_SHOP_CONFIG.randomSpinStarCost;
+    state.styleTokens -= STYLE_SHOP_CONFIG.randomSpinTokenCost;
+    const randomStyle = lockedStyles[Math.floor(Math.random() * lockedStyles.length)];
+    unlockStyle(randomStyle.id);
+    state.selectedStyleId = randomStyle.id;
+    saveState();
+    render();
+    showMessage(`Vytocen styl ${randomStyle.label}.`, "success");
+  }
+
+  function setOverviewTab(tab) {
+    state.screenState.overviewTab = tab;
+    saveState();
+    render();
+  }
+
+  function setNickname(nextNickname) {
+    const nickname = String(nextNickname ?? "").trim().slice(0, 20);
+
+    if (!state.linkedEmail && !state.currentEmail) {
+      showMessage("Nick jde menit az po propojeni uctu s e-mailem.");
+      return;
+    }
+
+    if (nickname.length < 2) {
+      showMessage("Nick musi mit aspon 2 znaky.");
+      return;
+    }
+
+    state.nickname = nickname;
+    saveState();
+    render();
+    showMessage("Nick byl ulozen.", "success");
+  }
+
+  function selectAvatar(avatarId) {
+    if (!isAvatarUnlocked(avatarId)) {
+      showMessage("Tento avatar jeste nemas odemceny.");
+      return;
+    }
+
+    state.selectedAvatarId = avatarId;
+    saveState();
+    render();
+    showMessage("Avatar byl nastaven.", "success");
+  }
+
+  function buyAvatar(avatarId) {
+    const avatar = AVATAR_OPTIONS.find((item) => item.id === avatarId);
+
+    if (!avatar || avatar.unlockType !== "shop") {
+      showMessage("Tento avatar ted nejde koupit.");
+      return;
+    }
+
+    if (isAvatarUnlocked(avatarId)) {
+      selectAvatar(avatarId);
+      return;
+    }
+
+    if (!hasEnoughStars(AVATAR_SHOP_CONFIG.directUnlockCost)) {
+      showMessage("Nemas dost hvezdicek na odemceni avataru.");
+      return;
+    }
+
+    state.stars -= AVATAR_SHOP_CONFIG.directUnlockCost;
+    unlockAvatar(avatarId);
+    state.selectedAvatarId = avatarId;
+    saveState();
+    render();
+    showMessage(`Avatar ${avatar.label} byl odemceny.`, "success");
+  }
+
+  function spinRandomAvatar() {
+    const lockedAvatars = AVATAR_OPTIONS.filter((avatar) => avatar.unlockType === "shop" && !isAvatarUnlocked(avatar.id));
+
+    if (!lockedAvatars.length) {
+      showMessage("Mas odemcene vsechny dostupne avatary.");
+      return;
+    }
+
+    if (!hasEnoughStars(AVATAR_SHOP_CONFIG.randomSpinCost)) {
+      showMessage("Nemas dost hvezdicek na vytoceni avataru.");
+      return;
+    }
+
+    state.stars -= AVATAR_SHOP_CONFIG.randomSpinCost;
+    const randomAvatar = lockedAvatars[Math.floor(Math.random() * lockedAvatars.length)];
+    unlockAvatar(randomAvatar.id);
+    state.selectedAvatarId = randomAvatar.id;
+    saveState();
+    render();
+    showMessage(`Vytocen avatar ${randomAvatar.label}.`, "success");
+  }
+
+  function renderAvatarImage(avatar, sizeClass) {
+    return `<img class="avatar-image ${sizeClass}" src="${avatar.src}" alt="${escapeHtml(avatar.label)}">`;
+  }
+
+  function toggleProfileMenu() {
+    state.screenState.profileMenuOpen = !state.screenState.profileMenuOpen;
+    saveState();
+    render();
+  }
+
+  function toggleStyleShop() {
+    state.screenState.styleShopOpen = !state.screenState.styleShopOpen;
+    saveState();
+    render();
+  }
+
+  function closeProfileMenu() {
+    if (!state.screenState.profileMenuOpen) {
+      return;
+    }
+
+    state.screenState.profileMenuOpen = false;
+    saveState();
+    render();
   }
 
   function isSectionCompleted(sectionIndex) {
@@ -1466,6 +1986,10 @@ function createIotCampScreen(container, options = {}) {
 
   function getTaskSolution(taskId) {
     return TASK_SOLUTIONS[taskId] ?? "";
+  }
+
+  function getTaskImageConfig(taskId) {
+    return TASK_IMAGE_CONFIG[taskId] ?? null;
   }
 
   function getTaskPosition(taskId) {
@@ -1853,9 +2377,19 @@ function createIotCampScreen(container, options = {}) {
     taskProgress.completed = true;
     taskProgress.completionType = "verified";
     state.stars += task.points;
+    const verifiedTaskCount = getVerifiedTaskCount();
+    const earnedStyleToken = verifiedTaskCount > 0 && verifiedTaskCount % STYLE_SHOP_CONFIG.tokenMilestone === 0;
+    if (earnedStyleToken) {
+      state.styleTokens += 1;
+    }
     saveState();
     backToSection();
-    showMessage(`Reseni uspesne. Ziskano ${task.points} hvezdicek.`, "success");
+    showMessage(
+      earnedStyleToken
+        ? `Reseni uspesne. Ziskano ${task.points} hvezdicek a 1 token stylu.`
+        : `Reseni uspesne. Ziskano ${task.points} hvezdicek.`,
+      "success",
+    );
   }
 
   function resetProgress() {
@@ -1881,7 +2415,9 @@ function createIotCampScreen(container, options = {}) {
     commitCurrentAccount();
     state.authenticatedForDay = null;
     state.currentStudentNumber = null;
+    state.currentEmail = null;
     state.adminPreviewActive = false;
+    state.linkedEmail = null;
     state.screenState = createDefaultScreenState();
     saveState();
     render();
@@ -1956,6 +2492,51 @@ function createIotCampScreen(container, options = {}) {
           return;
         }
 
+        if (action === "buy-style" && button.dataset.styleId) {
+          buyStyle(button.dataset.styleId);
+          return;
+        }
+
+        if (action === "select-style" && button.dataset.styleId) {
+          selectStyle(button.dataset.styleId);
+          return;
+        }
+
+        if (action === "spin-style") {
+          spinRandomStyle();
+          return;
+        }
+
+        if (action === "open-profile-panel") {
+          toggleProfileMenu();
+          return;
+        }
+
+        if (action === "toggle-style-shop") {
+          toggleStyleShop();
+          return;
+        }
+
+        if (action === "buy-avatar" && button.dataset.avatarId) {
+          buyAvatar(button.dataset.avatarId);
+          return;
+        }
+
+        if (action === "select-avatar" && button.dataset.avatarId) {
+          selectAvatar(button.dataset.avatarId);
+          return;
+        }
+
+        if (action === "spin-avatar") {
+          spinRandomAvatar();
+          return;
+        }
+
+        if (action === "close-profile-menu") {
+          closeProfileMenu();
+          return;
+        }
+
         if (action === "back-to-section") {
           backToSection();
           return;
@@ -1991,6 +2572,9 @@ function createIotCampScreen(container, options = {}) {
     const resetButton = container.querySelector('[data-action="reset-progress"]');
     const resetAccessButton = container.querySelector('[data-action="reset-access"]');
     const loginForm = container.querySelector('[data-role="daily-pin-form"]');
+    const emailLoginForm = container.querySelector('[data-role="email-login-form"]');
+    const accountLinkForm = container.querySelector('[data-role="account-link-form"]');
+    const nicknameForm = container.querySelector('[data-role="nickname-form"]');
     const adminToggleButton = container.querySelector('[data-action="open-admin"]');
     const adminCloseButton = container.querySelector('[data-action="close-admin"]');
     const adminLoginForm = container.querySelector('[data-role="admin-login-form"]');
@@ -2036,6 +2620,38 @@ function createIotCampScreen(container, options = {}) {
         state.currentStudentNumber = studentNumber;
         saveState();
         render();
+      });
+    }
+
+    if (emailLoginForm) {
+      emailLoginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const message = container.querySelector('[data-role="email-login-message"]');
+        const formData = new FormData(emailLoginForm);
+        const email = String(formData.get("email") ?? "");
+        const password = String(formData.get("password") ?? "");
+        const result = loginWithEmail(email, password);
+        message.textContent = result.message;
+      });
+    }
+
+    if (accountLinkForm) {
+      accountLinkForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const message = container.querySelector('[data-role="account-link-message"]');
+        const formData = new FormData(accountLinkForm);
+        const email = String(formData.get("email") ?? "");
+        const password = String(formData.get("newPassword") ?? "");
+        const result = linkAccountToEmail(email, password);
+        message.textContent = result.message;
+      });
+    }
+
+    if (nicknameForm) {
+      nicknameForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(nicknameForm);
+        setNickname(String(formData.get("nickname") ?? ""));
       });
     }
 
@@ -2087,7 +2703,12 @@ function createIotCampScreen(container, options = {}) {
           state.accounts = {};
           state.authenticatedForDay = null;
           state.currentStudentNumber = null;
+          state.currentEmail = null;
           state.stars = 20;
+          state.styleTokens = 0;
+          state.selectedStyleId = "classic";
+          state.unlockedStyleIds = ["classic"];
+          state.linkedEmail = null;
           state.taskState = createDefaultTaskState();
           state.screenState = createDefaultScreenState();
         }
@@ -2165,6 +2786,185 @@ function createIotCampScreen(container, options = {}) {
     `;
   }
 
+  function renderCurrencyBar() {
+    return `
+      <section class="currency-bar">
+        <div class="currency-pill currency-pill--stars">
+          <span class="currency-pill__icon">&#9733;</span>
+          <span class="currency-pill__value">${state.stars}</span>
+          <span class="currency-pill__label">Hvezdicky</span>
+        </div>
+        <div class="currency-pill currency-pill--tokens">
+          <span class="currency-pill__icon">&#10022;</span>
+          <span class="currency-pill__value">${state.styleTokens}</span>
+          <span class="currency-pill__label">Tokeny stylu</span>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderStyleShopPanel() {
+    const selectedStyle = getSelectedStyle();
+    const isOpen = Boolean(state.screenState.styleShopOpen);
+    const styleCardsMarkup = STYLE_OPTIONS.map((style) => {
+      const unlocked = isStyleUnlocked(style.id);
+      const isActive = style.id === selectedStyle.id;
+      const buttonLabel = !unlocked
+        ? `Odemknout za ${STYLE_SHOP_CONFIG.directUnlockCost} hvezdicek`
+        : isActive
+          ? "Aktivni"
+          : "Pouzit";
+      const buttonAction = unlocked ? "select-style" : "buy-style";
+
+      return `
+        <article class="style-card style-card--${style.accent} ${isActive ? "style-card--active" : ""}">
+          <div class="style-card__top">
+            <strong>${escapeHtml(style.label)}</strong>
+            <span>${unlocked ? (isActive ? "Pouzivas" : "Odemceno") : "Zamceno"}</span>
+          </div>
+          <p>${escapeHtml(style.description)}</p>
+          <button
+            type="button"
+            data-action="${buttonAction}"
+            data-style-id="${style.id}"
+            ${isActive ? "disabled" : ""}
+          >${buttonLabel}</button>
+        </article>
+      `;
+    }).join("");
+
+    return `
+      <aside class="shop-panel shop-panel--styles">
+        <div class="shop-tabs">
+          <button type="button" class="shop-tabs__tab shop-tabs__tab--active" data-action="toggle-style-shop">
+            ${isOpen ? "Nakup stylu - skryt" : "Nakup stylu"}
+          </button>
+        </div>
+        ${isOpen ? `
+          <div class="shop-panel__intro">
+            <p class="eyebrow">STYLY</p>
+            <h2>Vzhled screenu</h2>
+            <p>Napovedy zustavaji prakticke. Za meny si tu muzes odemykat a menit vzhled celeho rozhrani.</p>
+          </div>
+          <div class="style-spin-card">
+            <strong>Nahodny styl</strong>
+            <p>Vytoc novy styl za ${STYLE_SHOP_CONFIG.randomSpinStarCost} hvezdicek a ${STYLE_SHOP_CONFIG.randomSpinTokenCost} token stylu.</p>
+            <button type="button" data-action="spin-style">Vytocit styl</button>
+          </div>
+          <div class="style-card-list">
+            ${styleCardsMarkup}
+          </div>
+        ` : ""}
+      </aside>
+    `;
+  }
+
+  function renderAccountLinkPanel() {
+    const linkedEmail = state.linkedEmail ? normalizeEmail(state.linkedEmail) : null;
+
+    return `
+      <aside class="shop-panel shop-panel--account">
+        <div class="shop-tabs">
+          <button type="button" class="shop-tabs__tab shop-tabs__tab--active">Propojeni uctu</button>
+        </div>
+        <div class="shop-panel__intro">
+          <p class="eyebrow">UCET</p>
+          <h2>E-mail a heslo</h2>
+          <p>Pro dlouhodobe ulozeni si muzes tenhle ucet propojit s e-mailem. Pak se prihlasis i dalsi dny bez denniho PINu.</p>
+        </div>
+        ${linkedEmail ? `
+          <div class="account-link-status">
+            <strong>Ucet je propojen</strong>
+            <p>${escapeHtml(linkedEmail)}</p>
+          </div>
+        ` : `
+          <form data-role="account-link-form" class="login-form login-form--stack">
+            <input name="email" type="email" autocomplete="off" placeholder="E-mail" required>
+            <input name="newPassword" type="password" autocomplete="new-password" placeholder="Nove heslo" required>
+            <button type="submit">Propojit ucet</button>
+          </form>
+          <p data-role="account-link-message" class="account-link-message" aria-live="polite"></p>
+        `}
+      </aside>
+    `;
+  }
+
+  function renderProfileMenu() {
+    const selectedAvatar = getSelectedAvatar();
+    const nickname = state.nickname ?? buildNicknameFromEmail(state.linkedEmail || state.currentEmail || "");
+    const avatarCardsMarkup = AVATAR_OPTIONS.map((avatar) => {
+      const unlocked = isAvatarUnlocked(avatar.id);
+      const isActive = avatar.id === selectedAvatar.id;
+      const buttonLabel = !unlocked
+        ? `Odemknout za ${AVATAR_SHOP_CONFIG.directUnlockCost} hvezdicek`
+        : isActive
+          ? "Aktivni"
+          : "Pouzit";
+      const buttonAction = unlocked ? "select-avatar" : "buy-avatar";
+
+      return `
+        <button
+          type="button"
+          class="avatar-tile ${isActive ? "avatar-tile--active" : ""} ${unlocked ? "" : "avatar-tile--locked"}"
+          data-action="${buttonAction}"
+          data-avatar-id="${avatar.id}"
+          ${isActive ? "disabled" : ""}
+        >
+          ${renderAvatarImage(avatar, "avatar-image--lg")}
+          <span class="avatar-tile__label">${escapeHtml(avatar.label)}</span>
+          <span class="avatar-tile__meta">${buttonLabel}</span>
+        </button>
+      `;
+    }).join("");
+
+    return `
+      <div class="profile-menu">
+        <div class="profile-menu__top">
+          <strong>Profil</strong>
+          <button type="button" class="ghost-button" data-action="close-profile-menu">Zavrit</button>
+        </div>
+        <div class="profile-panel__head">
+          <div class="profile-avatar">
+            ${renderAvatarImage(selectedAvatar, "avatar-image--xl")}
+          </div>
+          <div>
+            <h2>${escapeHtml(nickname)}</h2>
+            <p>${escapeHtml(state.linkedEmail || state.currentEmail || "")}</p>
+          </div>
+        </div>
+        <form data-role="nickname-form" class="login-form login-form--stack">
+          <input name="nickname" type="text" autocomplete="off" placeholder="Nickname" value="${escapeHtml(nickname)}" required>
+          <button type="submit">Ulozit nick</button>
+        </form>
+        <div class="avatar-spin-card">
+          <strong>Nahodny avatar</strong>
+          <p>Vytoc novy avatar za ${AVATAR_SHOP_CONFIG.randomSpinCost} hvezdicek.</p>
+          <button type="button" data-action="spin-avatar">Vytocit avatar</button>
+        </div>
+        <div class="avatar-picker-grid">
+          ${avatarCardsMarkup}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderOverview() {
+    return `
+      <div class="overview-layout">
+        <div class="overview-layout__main">
+          ${renderProgressHeader()}
+          <div class="section-stack">
+            ${renderSectionCards()}
+          </div>
+        </div>
+        <div class="overview-layout__side">
+          ${renderStyleShopPanel()}
+          ${isAdminPreview() ? "" : renderAccountLinkPanel()}
+        </div>
+      </div>
+    `;
+  }
+
   function renderSectionCards() {
     return sections.map((section, sectionIndex) => {
       const counts = getTaskCounts(sectionIndex);
@@ -2179,13 +2979,13 @@ function createIotCampScreen(container, options = {}) {
           : isCompleted
             ? "task-pill--complete"
             : "task-pill--active";
-        const icon = !sectionUnlocked || !unlocked ? "🔒" : isCompleted ? "✓" : "○";
+        const icon = !sectionUnlocked || !unlocked ? "&#128274;" : isCompleted ? "&#10003;" : "&#9675;";
 
         return `
           <div class="task-pill ${stateClass}">
             <span class="task-pill__status">${icon}</span>
             <span class="task-pill__title">${escapeHtml(task.title)}</span>
-            <span class="task-pill__arrow">›</span>
+            <span class="task-pill__arrow">&rsaquo;</span>
           </div>
         `;
       }).join("");
@@ -2239,7 +3039,7 @@ function createIotCampScreen(container, options = {}) {
           ${canOpenTask(sectionIndex, taskIndex) ? "" : "disabled"}
         >
           <span class="task-row__left">
-            <span class="task-row__dot">${isCompleted ? "✓" : isActive ? "→" : "🔒"}</span>
+            <span class="task-row__dot">${isCompleted ? "&#10003;" : isActive ? "&rarr;" : "&#128274;"}</span>
             <span>
               <strong>${escapeHtml(task.title)}</strong>
               <small>${statusLabel}</small>
@@ -2322,6 +3122,7 @@ function createIotCampScreen(container, options = {}) {
         ? "Napoveda k zapojeni"
         : "Spravne reseni";
     const activeSolution = activeHelpType === "solution" ? getTaskSolution(task.id) : "";
+    const taskImage = getTaskImageConfig(task.id);
     const previousTaskId = getAdjacentTaskId(task.id, -1);
     const nextTaskId = getAdjacentTaskId(task.id, 1);
     const activeHelpMarkup = activeHelpType ? `
@@ -2338,6 +3139,11 @@ function createIotCampScreen(container, options = {}) {
           <strong>${escapeHtml(task.imageLabel ?? "Referencni zapojeni")}</strong>
           <span>${activeHelpType === "solution" ? "Tady je kompletni textove reseni, ktere muzete pouzit po slozeni bloku v Tinkercadu." : "Originalni obrazek sem muzu vlozit presne, jakmile ho budeme mit jako soubor v projektu."}</span>
         </div>
+        ${activeHelpType === "wiring" && taskImage ? `
+          <div class="help-panel__wiring-crop">
+            <img src="${escapeHtml(taskImage.src)}" alt="${escapeHtml(taskImage.alt)}">
+          </div>
+        ` : ""}
         ${activeHelpType === "solution" ? `
           <pre class="solution-code"><code>${escapeHtml(activeSolution)}</code></pre>
         ` : `
@@ -2347,15 +3153,15 @@ function createIotCampScreen(container, options = {}) {
         `}
       </section>
     ` : "";
-    const wiringPreviewMarkup = task.imageSrc ? `
+    const wiringPreviewMarkup = isAdminPreview() && taskImage ? `
       <div class="detail-card__wiring-preview">
-        <img src="${escapeHtml(task.imageSrc)}" alt="${escapeHtml(task.imageAlt ?? task.imageLabel ?? `Zapojeni pro ukol ${task.title}`)}">
+        <img src="${escapeHtml(taskImage.src)}" alt="${escapeHtml(taskImage.alt ?? task.imageLabel ?? `Zapojeni pro ukol ${task.title}`)}">
       </div>
     ` : `
       <div class="detail-card__placeholder">
         <div class="detail-card__placeholder-copy">
           <strong>${escapeHtml(task.imageLabel ?? "Referencni zapojeni")}</strong>
-          <span>Jakmile pridame screenshot z prezentace nebo obrazek zapojeni do projektu, zobrazi se tady primo v detailu ukolu.</span>
+          <span>${isAdminPreview() ? "Jakmile pridame screenshot z prezentace do slozky assets, admin tu uvidi cely obrazek vcetne bloku." : "Ve studentskem rezimu se cast zapojeni ukaze po kliknuti na napovedu Zapojeni."}</span>
         </div>
       </div>
     `;
@@ -2389,20 +3195,10 @@ function createIotCampScreen(container, options = {}) {
         <p class="detail-card__section">${escapeHtml(section.title)}</p>
         <h2>${escapeHtml(task.title)}</h2>
         <p class="detail-card__meta">Hvezdicky za splneni: ${task.points}</p>
-        <p class="detail-card__meta">Stav: ${statusText}</p>
+        <p class="detail-card__meta">Zadani:</p>
         <ul class="task-goals">
           ${goalsMarkup}
         </ul>
-        <div class="task-structure">
-          <div class="task-structure__card">
-            <strong>1. Zapojeni obvodu</strong>
-            <p>Deti postavi Arduino zapojeni podle zadani nebo obrazku.</p>
-          </div>
-          <div class="task-structure__card">
-            <strong>2. Program</strong>
-            <p>Potom vytvori nebo upravi program, ktery bude s obvodem pracovat.</p>
-          </div>
-        </div>
         ${wiringPreviewMarkup}
         <p>${escapeHtml(task.description)}</p>
         ${activeHelpMarkup}
@@ -2447,7 +3243,7 @@ function createIotCampScreen(container, options = {}) {
         </div>
         <div class="admin-stats-row__meta">
           <span>${student.percent}% hotovo</span>
-          <span>&#9733; ${student.stars}</span>
+          <span>&#9733; ${student.stars} | T ${student.styleTokens}</span>
         </div>
       </div>
     `).join("");
@@ -2511,6 +3307,13 @@ function createIotCampScreen(container, options = {}) {
                 <button type="submit">Vstoupit</button>
               </form>
               <p data-role="daily-pin-message" aria-live="polite"></p>
+              <div class="login-divider"><span>Nebo prihlaseni pres e-mail</span></div>
+              <form data-role="email-login-form" class="login-form login-form--stack">
+                <input name="email" type="email" autocomplete="username" placeholder="E-mail" required>
+                <input name="password" type="password" autocomplete="current-password" placeholder="Heslo" required>
+                <button type="submit">Prihlasit e-mailem</button>
+              </form>
+              <p data-role="email-login-message" aria-live="polite"></p>
             </section>
           `}
         </div>
@@ -2522,25 +3325,32 @@ function createIotCampScreen(container, options = {}) {
 
   function renderApp() {
     let bodyContent = "";
+    const selectedAvatar = getSelectedAvatar();
+    const profileNickname = state.nickname ?? buildNicknameFromEmail(state.linkedEmail || state.currentEmail || "");
 
     if (state.screenState.currentView === "task" && state.screenState.activeTaskId) {
       bodyContent = renderTaskView(state.screenState.activeTaskId);
     } else if (state.screenState.currentView === "section" && state.screenState.activeSectionId) {
       bodyContent = renderSectionView(state.screenState.activeSectionId);
     } else {
-      bodyContent = `
-        ${renderProgressHeader()}
-        <div class="section-stack">
-          ${renderSectionCards()}
-        </div>
-      `;
+      bodyContent = renderOverview();
     }
 
     container.innerHTML = `
-      <section class="dashboard-shell">
+      <section class="dashboard-shell theme--${getSelectedStyle().id}">
         <div class="app-shell__corner">
           <button type="button" class="ghost-button app-shell__back-button" data-action="logout-student">&larr; Zpet</button>
         </div>
+        ${!isAdminPreview() && (state.linkedEmail || state.currentEmail) ? `
+          <button type="button" class="profile-chip" data-action="open-profile-panel">
+            <span class="profile-chip__avatar">
+              ${renderAvatarImage(selectedAvatar, "avatar-image--sm")}
+            </span>
+            <span class="profile-chip__name">${escapeHtml(profileNickname)}</span>
+          </button>
+          ${state.screenState.profileMenuOpen ? renderProfileMenu() : ""}
+        ` : ""}
+        ${renderCurrencyBar()}
         ${isAdminPreview() ? `
           <div class="admin-preview-banner">
             <strong>Admin nahled</strong>

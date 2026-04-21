@@ -73,15 +73,17 @@ body::after {
   z-index: 1;
 }
 
-.dashboard-shell,
+.dashboard-shell {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  padding: 48px 28px 72px;
+  position: relative;
+}
+
 .login-screen {
   width: min(100%, 760px);
   margin: 0 auto;
   padding: 48px 28px 72px;
-}
-
-.dashboard-shell {
-  position: relative;
 }
 
 .eyebrow {
@@ -184,6 +186,336 @@ body::after {
 .badge__label {
   font-size: 0.78rem;
   font-weight: 600;
+}
+
+.currency-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 10px 0 24px;
+  padding-left: 84px;
+  padding-right: 240px;
+}
+
+.currency-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(20, 28, 46, 0.86);
+}
+
+.currency-pill__icon {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.currency-pill__value {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.currency-pill__label {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.currency-pill--stars .currency-pill__icon,
+.currency-pill--stars .currency-pill__value {
+  color: #ffcc73;
+}
+
+.currency-pill--tokens .currency-pill__icon,
+.currency-pill--tokens .currency-pill__value {
+  color: #8ed8ff;
+}
+
+.overview-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 26px;
+  align-items: start;
+}
+
+.overview-layout__main,
+.overview-layout__side {
+  min-width: 0;
+}
+
+.shop-tabs {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.shop-tabs__tab {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.shop-tabs__tab--active {
+  background: rgba(61, 115, 255, 0.18);
+}
+
+.shop-panel--styles {
+  padding: 22px;
+  background: rgba(29, 38, 59, 0.92);
+}
+
+.shop-panel--account {
+  margin-top: 20px;
+  padding: 22px;
+  background: rgba(29, 38, 59, 0.92);
+}
+
+.shop-panel__intro p:last-child {
+  color: var(--muted);
+}
+
+.account-link-status {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.account-link-status p,
+.account-link-message {
+  color: var(--muted);
+}
+
+.profile-chip {
+  position: absolute;
+  top: 12px;
+  right: -16px;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(20, 28, 46, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.profile-chip__avatar {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.profile-chip__name {
+  font-weight: 700;
+}
+
+.profile-menu {
+  position: absolute;
+  top: 86px;
+  right: 8px;
+  z-index: 24;
+  width: min(380px, calc(100vw - 24px));
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  background: rgba(20, 28, 46, 0.98);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+}
+
+.profile-menu__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.profile-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.profile-panel__head p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.profile-avatar {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.avatar-image {
+  display: block;
+  object-fit: cover;
+  border-radius: 999px;
+}
+
+.avatar-image--sm {
+  width: 34px;
+  height: 34px;
+}
+
+.avatar-image--lg {
+  width: 54px;
+  height: 54px;
+}
+
+.avatar-image--xl {
+  width: 58px;
+  height: 58px;
+}
+
+.avatar-spin-card {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.avatar-spin-card p {
+  color: var(--muted);
+}
+
+.avatar-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.avatar-tile {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 12px 10px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+
+.avatar-tile--active {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.avatar-tile--locked {
+  opacity: 0.9;
+}
+
+.avatar-tile__label {
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.avatar-tile__meta {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 18px 0;
+  color: var(--muted);
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.style-spin-card {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.style-spin-card p {
+  color: var(--muted);
+}
+
+.style-card-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.style-card {
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.style-card__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.style-card__top span,
+.style-card p {
+  color: var(--muted);
+}
+
+.style-card--active {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.style-card--orange {
+  background: linear-gradient(180deg, rgba(73, 49, 34, 0.92), rgba(52, 34, 24, 0.92));
+}
+
+.style-card--green {
+  background: linear-gradient(180deg, rgba(32, 62, 54, 0.92), rgba(24, 47, 41, 0.92));
+}
+
+.style-card--cyan {
+  background: linear-gradient(180deg, rgba(31, 56, 74, 0.92), rgba(21, 41, 57, 0.92));
+}
+
+.theme--sunrise {
+  --green: #ffb96b;
+  --green-soft: rgba(255, 185, 107, 0.16);
+  --amber: #ffd36f;
+  --amber-soft: rgba(255, 211, 111, 0.16);
+  --blue-soft: rgba(255, 151, 106, 0.18);
+}
+
+.theme--forest {
+  --green: #60df9f;
+  --green-soft: rgba(96, 223, 159, 0.16);
+  --amber: #b6db71;
+  --amber-soft: rgba(182, 219, 113, 0.16);
+  --blue-soft: rgba(91, 190, 151, 0.18);
+}
+
+.theme--ice {
+  --green: #7ce8ff;
+  --green-soft: rgba(124, 232, 255, 0.16);
+  --amber: #8bc8ff;
+  --amber-soft: rgba(139, 200, 255, 0.16);
+  --blue-soft: rgba(139, 200, 255, 0.24);
 }
 
 .section-stack {
@@ -557,29 +889,6 @@ body::after {
   font-weight: 700;
 }
 
-.task-structure {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 20px;
-}
-
-.task-structure__card {
-  padding: 18px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.task-structure__card strong {
-  display: block;
-  margin-bottom: 8px;
-}
-
-.task-structure__card p {
-  margin: 0;
-  color: var(--muted);
-}
-
 .help-panel {
   margin-top: 20px;
   padding: 20px;
@@ -629,6 +938,22 @@ body::after {
 
 .help-panel__steps li + li {
   margin-top: 10px;
+}
+
+.help-panel__wiring-crop {
+  margin-top: 18px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 16, 29, 0.82);
+}
+
+.help-panel__wiring-crop img {
+  display: block;
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  object-position: left center;
 }
 
 .solution-code {
@@ -1038,9 +1363,38 @@ button:disabled {
     padding-inline: 18px;
   }
 
+  .dashboard-shell {
+    width: min(100%, 760px);
+  }
+
+  .currency-bar {
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 48px;
+  }
+
+  .overview-layout {
+    grid-template-columns: 1fr;
+  }
+
   .app-shell__corner {
     top: 8px;
     left: 8px;
+  }
+
+  .profile-chip {
+    top: 8px;
+    right: 0;
+  }
+
+  .profile-menu {
+    top: 76px;
+    right: 8px;
+    width: min(420px, calc(100vw - 16px));
+  }
+
+  .avatar-picker-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .hero-card__score {
@@ -1069,10 +1423,6 @@ button:disabled {
   }
 
   .admin-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .task-structure {
     grid-template-columns: 1fr;
   }
 
