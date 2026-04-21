@@ -24,6 +24,17 @@ const AVATAR_SHOP_CONFIG = {
   randomSpinCost: 12,
 };
 
+const REWARD_CONFIG = {
+  noHelpBonusStars: 2,
+  firstTryBonusStars: 1,
+  dailyChallengeStars: 6,
+};
+
+const SECTION_UNLOCK_COSTS = {
+  advanced: 25,
+  expert: 40,
+};
+
 const PREVIEW_ALLOW_ANY_PIN = false;
 const REQUIRE_LECTURER_PIN_FOR_CHECK = false;
 
@@ -61,6 +72,41 @@ const STYLE_OPTIONS = [
     label: "Ice",
     description: "Chladny modry styl s ostrejsimi kontrasty.",
     accent: "cyan",
+    unlockType: "shop",
+  },
+  {
+    id: "ember",
+    label: "Ember",
+    description: "Tezky cerveno-oranzovy styl s vyraznym kontrastem.",
+    accent: "red",
+    unlockType: "shop",
+  },
+  {
+    id: "lagoon",
+    label: "Lagoon",
+    description: "Tyrkysovy styl inspirovany vodou a laboratorni grafikou.",
+    accent: "teal",
+    unlockType: "shop",
+  },
+  {
+    id: "sand",
+    label: "Sand",
+    description: "Svetlejsi piskovy motiv s teplymi akcenty.",
+    accent: "sand",
+    unlockType: "shop",
+  },
+  {
+    id: "midnight",
+    label: "Midnight",
+    description: "Tmavy technicky styl s hlubsim kontrastem a studenymi svetly.",
+    accent: "slate",
+    unlockType: "shop",
+  },
+  {
+    id: "volt",
+    label: "Volt",
+    description: "Elektricky zeleny styl s ostrejsim game-lab feelingem.",
+    accent: "lime",
     unlockType: "shop",
   },
 ];
@@ -870,6 +916,50 @@ const sections = [
           "Pomoci if podminky prepinej LED na HIGH a LOW podle zmerene hodnoty.",
         ],
       },
+      {
+        id: "beginner-pwm-led",
+        title: "Plynula LED",
+        description: "Pomoci PWM nastavuj jas LED a vyzkousej plynuly prechod mezi tmou a plnym svitem.",
+        points: 5,
+        imageLabel: "PWM LED + Arduino UNO",
+        goals: [
+          "Pripoj LED na PWM vystup Arduina.",
+          "Postupne men jas LED od 0 do 255.",
+          "Vyzkousej plynule zesvetleni i stmaveni.",
+        ],
+        wiringHelp: [
+          "LED pripoj pres rezistor na pin s podporou PWM a na GND.",
+          "Over si, ze pouzivas vhodny vystupni pin oznaceny symbolem PWM.",
+          "Zapojeni nech co nejjednodussi, at se muzes soustredit na program.",
+        ],
+        codeHelp: [
+          "Pouzij analogWrite() pro nastaveni jasu LED.",
+          "Jas ukladej do promenne a postupne ho zvetsuj nebo zmensuj.",
+          "Mezi zmenami pridej kratky delay(), aby byl prechod viditelny.",
+        ],
+      },
+      {
+        id: "beginner-rgb-button",
+        title: "RGB tlacitko",
+        description: "Jednim tlacitkem prepinej mezi barvami RGB LED a vytvor jednoduchy barevny rezim.",
+        points: 5,
+        imageLabel: "RGB LED + tlacitko",
+        goals: [
+          "Zapoj RGB LED a jedno tlacitko.",
+          "Kazdym stiskem prepni na dalsi barvu.",
+          "Po nekolika stiscich se vrat na prvni barvu.",
+        ],
+        wiringHelp: [
+          "RGB LED pripoj na tri samostatne vystupy pres rezistory.",
+          "Tlacitko zapoj na digitalni vstup s jasnym klidovym stavem.",
+          "Zkontroluj, jestli mas spravne zapojenou spolecnou nozicku RGB LED.",
+        ],
+        codeHelp: [
+          "Drz si index aktualni barvy v promenne.",
+          "Pri stisku tlacitka index posun na dalsi hodnotu.",
+          "Podle indexu nastav kombinaci vystupu pro cervenou, zelenou a modrou.",
+        ],
+      },
     ],
   },
   {
@@ -1011,6 +1101,94 @@ const sections = [
           "Kazdou zmenu vypis pres Serial.println() a osetri kratke zpozdeni proti vice stiskum.",
         ],
       },
+      {
+        id: "advanced-door-alarm",
+        title: "Dverni alarm",
+        description: "Pomoci tlacitka nebo magnetickeho kontaktu simuluj otevreni dveri a spust svetelny nebo zvukovy alarm.",
+        points: 5,
+        imageLabel: "Kontakt dveri + LED + buzzer",
+        goals: [
+          "Zaznamenej otevreni dveri pomoci vstupu.",
+          "Pri otevreni spust alarm.",
+          "Pri zavreni se ma obvod vratit do klidoveho stavu.",
+        ],
+        wiringHelp: [
+          "Pouzij spinac nebo tlacitko jako simulaci senzoru dveri.",
+          "LED a buzzer pripoj na samostatne vystupy.",
+          "Dohlidni na stabilni klidovy stav vstupu, aby alarm nespoustel nahodne.",
+        ],
+        codeHelp: [
+          "V loop stale kontroluj stav vstupu pomoci digitalRead().",
+          "Pri aktivaci vstupu zapni LED nebo buzzer.",
+          "Pri navratu do klidu alarm vypni a ponech system pripraveny na dalsi otevreni.",
+        ],
+      },
+      {
+        id: "advanced-distance-bar",
+        title: "Meric vzdalenosti",
+        description: "Udelej z ultrazvukoveho senzoru jednoduchy ukazatel vzdalenosti s vice LED urovnemi.",
+        points: 5,
+        imageLabel: "Ultrazvukovy senzor + vice LED",
+        goals: [
+          "Pravidelne mer vzdalenost pred senzorem.",
+          "Podle vzdalenosti rozsvecuj ruzny pocet LED.",
+          "Blizsi objekt ma znamenat vyssi uroven signalizace.",
+        ],
+        wiringHelp: [
+          "Pripoj ultrazvukovy senzor stejne jako u parkovaciho systemu.",
+          "Priprav radu vice LED na samostatnych vystupnich pinech.",
+          "Kazdou LED zapoj pres rezistor a sjednot vsechny zeme.",
+        ],
+        codeHelp: [
+          "Nejdriv zmer vzdalenost a uloz ji do promenne.",
+          "Rozdel si hodnoty na nekolik pasem, napr. daleko, stredne, blizko.",
+          "Podle pasma rozsvecuj jednu, dve nebo tri LED.",
+        ],
+      },
+      {
+        id: "advanced-seven-segment-counter",
+        title: "7-segment pocitadlo",
+        description: "Pomoci dvou tlacitek ovladej cislo na 7-segmentovem displeji a zobrazuj hodnoty 0 az 9.",
+        points: 5,
+        imageLabel: "7-segment display + 2 tlacitka",
+        goals: [
+          "Jednim tlacitkem cislo zvysuj a druhym snizuj.",
+          "Hodnotu zobrazuj na 7-segmentovem displeji.",
+          "Udrzuj rozsah 0 az 9 a nenech hodnotu utikat mimo nej.",
+        ],
+        wiringHelp: [
+          "7-segment display zapoj pres rezistory na vystupni piny Arduina.",
+          "Pouzij dve tlacitka jako samostatne vstupy pro plus a minus.",
+          "Predem si oznac segmenty a over, jestli mas spravny typ displeje.",
+        ],
+        codeHelp: [
+          "Udrzuj aktualni hodnotu v promenne.",
+          "Podle stisku tlacitek ji zvetsuj nebo zmensuj.",
+          "Pro kazde cislo si priprav funkci nebo tabulku, ktera nastavi spravne segmenty.",
+        ],
+      },
+      {
+        id: "advanced-reaction-buzzer",
+        title: "Reakcni stopky",
+        description: "Po nahodne pauze se rozsviti LED nebo pipne buzzer a hrac musi co nejrychleji stisknout tlacitko.",
+        points: 5,
+        imageLabel: "LED nebo buzzer + tlacitko",
+        goals: [
+          "Spust signal az po nahodne dlouhe pauze.",
+          "Po signalu cekej na co nejrychlejsi reakci hrace.",
+          "Pokud hrac zmackne tlacitko predem, hra to vyhodnoti jako chybu.",
+        ],
+        wiringHelp: [
+          "Pouzij jedno tlacitko jako vstup a LED nebo buzzer jako vystup pro start signal.",
+          "Tlacitko musi mit stabilni klidovy stav.",
+          "Pro vetsi efekt muzes spojit LED i buzzer dohromady.",
+        ],
+        codeHelp: [
+          "Pouzij random() nebo millis() pro nahodne cekani pred startem kola.",
+          "Pred startem kontroluj, jestli hrac nedrzi tlacitko.",
+          "Po start signalu mer dobu do stisku a vypis nebo jinak oznam vysledek.",
+        ],
+      },
     ],
   },
   {
@@ -1066,8 +1244,8 @@ const sections = [
       },
       {
         id: "expert-rgb-loop",
-        title: "Loop RGB",
-        description: "Namixuj barvu RGB LED pomoci tri potenciometru a tri analogovych vstupu.",
+        title: "RGB mixer",
+        description: "Namixuj barvu RGB LED pomoci tri potenciometru a vytvor vlastni svetelne sceny.",
         points: 5,
         imageLabel: "RGB LED + 3 potenciometry",
         goals: [
@@ -1174,9 +1352,196 @@ const sections = [
           "Pro stabilnejsi chovani dopln podminku s millis() nebo kratkym delay() mezi zmenami stavu.",
         ],
       },
+      {
+        id: "expert-servo-lock",
+        title: "Kodovy zamek se servem",
+        description: "Pomoci tlacitek nebo serioveho vstupu simuluj zadani kodu a po spravnem hesle odemkni servo zamek.",
+        points: 5,
+        imageLabel: "Servo + tlacitka nebo seriovy vstup",
+        goals: [
+          "Prijmi jednoduchy vstupni kod.",
+          "Porovnej ho se spravnou kombinaci.",
+          "Po spravnem kodu servo kratce otevri a pak ho vrat zpet.",
+        ],
+        wiringHelp: [
+          "Servo pripoj na napajeni, GND a ridici pin.",
+          "Jako vstup pouzij tlacitka nebo seriovy monitor podle zvolene varianty.",
+          "Pri pouziti vice tlacitek si priprav jasne rozdeleni, co ktere tlacitko zadava.",
+        ],
+        codeHelp: [
+          "Uloz si spravny kod do promenne nebo pole.",
+          "Sbirej vstup a po dokonceni ho porovnej s ocekavanou hodnotou.",
+          "Pri spravne shode nastav servo do otevrene polohy a po chvili ho zavri.",
+        ],
+      },
+      {
+        id: "expert-memory-game",
+        title: "Pametova hra",
+        description: "Vytvor sekvenci svetel nebo tonu, kterou musi hrac zopakovat ve spravnem poradi.",
+        points: 5,
+        imageLabel: "Vice LED nebo tlacitek pro pametovou hru",
+        goals: [
+          "Nahodne vygeneruj jednoduchou sekvenci.",
+          "Prehraj ji hraci pomoci LED nebo zvuku.",
+          "Vyhodnot, jestli hrac zadal stejne poradi.",
+        ],
+        wiringHelp: [
+          "Pouzij vice tlacitek jako vstupy a vice LED nebo buzzer jako vystupy.",
+          "Kazdy vstup i vystup drz oddelene a prehledne oznaceny.",
+          "Pro jednoduchou variantu staci tri tlacitka a tri LED.",
+        ],
+        codeHelp: [
+          "Sekvenci si uloz do pole a prehravej ji ve smycce.",
+          "Cti vstupy od hrace a porovnavej je s ocekavanymi hodnotami.",
+          "Pri chybe oznam neuspech, pri spravne sekvenci pridej dalsi krok nebo pochvalu.",
+        ],
+      },
+      {
+        id: "expert-joystick-servo",
+        title: "Joystick + servo",
+        description: "Ovladej servo joystickem a pridej aspon dva rezimy, treba presne rizeni a rychly navrat do stredu.",
+        points: 5,
+        imageLabel: "Joystick + servo motor",
+        goals: [
+          "Joystickem men polohu serva.",
+          "Preved analogovou hodnotu joysticku na uhel serva.",
+          "Pridaj rezim nebo specialni chovani, treba navrat do stredu po stisku.",
+        ],
+        wiringHelp: [
+          "Joystick zapoj na 5V, GND a analogove vystupy osy.",
+          "Servo pripoj na napajeni, GND a signalni pin.",
+          "Pokud joystick obsahuje i tlacitko, muzes ho pouzit pro zmenu rezimu.",
+        ],
+        codeHelp: [
+          "Cti hodnotu z analogove osy joysticku.",
+          "Pomoci map() ji preved na rozsah serva 0 az 180.",
+          "Pro dalsi rezim pouzij tlacitko joysticku nebo dalsi podminku v programu.",
+        ],
+      },
+      {
+        id: "expert-dht-station",
+        title: "Meteostanice DHT",
+        description: "Pomoci DHT11 nebo DHT22 mer teplotu a vlhkost a zobrazuj nebo signalizuj, jak se meni prostredi.",
+        points: 5,
+        imageLabel: "DHT11 nebo DHT22 + indikator",
+        goals: [
+          "Ziskej teplotu i vlhkost z DHT senzoru.",
+          "Vypis hodnoty do serioveho monitoru nebo je jinak signalizuj.",
+          "Pridaj aspon dve hranice, ktere vyhodnoti stav prostredi.",
+        ],
+        wiringHelp: [
+          "DHT senzor zapoj na napajeni, GND a datovy pin podle typu modulu v Tinkercadu.",
+          "Jako vystup pouzij LED, buzzer nebo jen seriovy monitor.",
+          "Predem si over, jak Tinkercad pracuje s vybranym DHT modulem.",
+        ],
+        codeHelp: [
+          "Pouzij pripraveny blok nebo knihovnu pro cteni DHT senzoru.",
+          "Pravidelne cti teplotu a vlhkost a ukladej je do promennych.",
+          "Pomoci if podminek rozlis, kdy je prostredi moc suche, moc teple nebo v poradku.",
+        ],
+      },
+      {
+        id: "expert-smart-greenhouse",
+        title: "Chytry sklenik",
+        description: "Spoj fotorezistor, DHT a vystupy do jednoho automatickeho systemu, ktery reaguje na svetlo i teplotu.",
+        points: 5,
+        imageLabel: "DHT + fotorezistor + LED nebo buzzer",
+        goals: [
+          "Mer svetlo i teplotu nebo vlhkost najednou.",
+          "Podle vice podminek rozhoduj, co se ma stat.",
+          "Vytvor aspon tri ruzne stavy systemu.",
+        ],
+        wiringHelp: [
+          "Fotorezistor zapoj na analogovy vstup jako delic napeti.",
+          "DHT senzor pripoj na samostatny datovy pin.",
+          "Jako vystup pouzij vice LED nebo buzzer pro ruzne alarmove stavy.",
+        ],
+        codeHelp: [
+          "Cti hodnoty z obou senzoru v jednom programu.",
+          "Rozdel si chovani na vice stavu, napr. tma, horko, sucho, idealni stav.",
+          "Kombinuj vice if podminek nebo pouzij jednodussi stavovou logiku.",
+        ],
+      },
+      {
+        id: "expert-parking-display",
+        title: "Parkovaci asistent s displejem",
+        description: "Rozsir parkovaci system o 7-segment display, ktery ukazuje zony nebo orientacni vzdalenost.",
+        points: 5,
+        imageLabel: "Ultrazvuk + 7-segment + LED",
+        goals: [
+          "Zmer vzdalenost pred senzorem.",
+          "Zobraz ji na 7-segmentu nebo z ni vytvor zonove cislo.",
+          "Soucasne zachovej i LED signalizaci nebo buzzer.",
+        ],
+        wiringHelp: [
+          "Pripoj ultrazvukovy senzor stejne jako v parkovacim systemu.",
+          "7-segment display zapoj na vystupni piny pres rezistory.",
+          "LED nebo buzzer nech jako doplnkovou signalizaci blizkosti.",
+        ],
+        codeHelp: [
+          "Nejdriv zmer vzdalenost a rozhodni, co se ma ukazat.",
+          "Pro zobrazeni priprav segmenty pro cisla nebo zonove hodnoty 1, 2, 3.",
+          "Vedle displeje udrz i logiku pro LED nebo zvuk podle vzdalenosti.",
+        ],
+      },
     ],
   },
 ];
+
+const SECTION_TASK_ORDER = {
+  beginner: [
+    "beginner-led",
+    "beginner-buzzer-button",
+    "beginner-potentiometer",
+    "beginner-pwm-led",
+    "beginner-traffic-light",
+    "beginner-light-sensor",
+    "beginner-and-or",
+    "beginner-rgb-button",
+  ],
+  advanced: [
+    "advanced-counter",
+    "advanced-seven-segment-counter",
+    "advanced-motion",
+    "advanced-reaction-buzzer",
+    "advanced-door-alarm",
+    "advanced-stair-light",
+    "advanced-distance-bar",
+    "advanced-temperature-alarm",
+    "advanced-crosswalk",
+    "advanced-parking",
+  ],
+  expert: [
+    "expert-servo",
+    "expert-arduino-piano",
+    "expert-servo-loop",
+    "expert-rgb-loop",
+    "expert-reaction-game",
+    "expert-led-roulette",
+    "expert-smart-barrier",
+    "expert-servo-lock",
+    "expert-joystick-servo",
+    "expert-dht-station",
+    "expert-smart-greenhouse",
+    "expert-parking-display",
+    "expert-memory-game",
+  ],
+};
+
+sections.forEach((section) => {
+  const orderedTaskIds = SECTION_TASK_ORDER[section.id];
+
+  if (!orderedTaskIds) {
+    return;
+  }
+
+  const taskOrderIndex = new Map(orderedTaskIds.map((taskId, index) => [taskId, index]));
+  section.tasks.sort((leftTask, rightTask) => {
+    const leftIndex = taskOrderIndex.get(leftTask.id) ?? Number.MAX_SAFE_INTEGER;
+    const rightIndex = taskOrderIndex.get(rightTask.id) ?? Number.MAX_SAFE_INTEGER;
+    return leftIndex - rightIndex;
+  });
+});
 
 function getTodayKey() {
   return new Date().toISOString().slice(0, 10);
@@ -1217,6 +1582,11 @@ function isValidEmail(email) {
 function buildNicknameFromEmail(email) {
   const localPart = normalizeEmail(email).split("@")[0] ?? "";
   return (localPart || "student").slice(0, 20);
+}
+
+function buildDateSeed(dateKey) {
+  return Array.from(String(dateKey ?? ""))
+    .reduce((sum, character) => sum + character.charCodeAt(0), 0);
 }
 
 function hasAll(text, patterns) {
@@ -1262,6 +1632,7 @@ function createDefaultTaskState() {
       completed: false,
       completionType: null,
       openedHelp: [],
+      submitAttempts: 0,
     };
   });
 
@@ -1287,9 +1658,11 @@ function createDefaultAccountState() {
     styleTokens: 0,
     selectedStyleId: "classic",
     unlockedStyleIds: ["classic"],
+    unlockedSectionIds: [],
     nickname: null,
     selectedAvatarId: DEFAULT_AVATAR_ID,
     unlockedAvatarIds: [DEFAULT_AVATAR_ID],
+    dailyChallengeClaimDate: null,
     linkedEmail: null,
     taskState: createDefaultTaskState(),
     screenState: createDefaultScreenState(),
@@ -1318,9 +1691,11 @@ function createIotCampScreen(container, options = {}) {
         styleTokens: 0,
         selectedStyleId: "classic",
         unlockedStyleIds: ["classic"],
+        unlockedSectionIds: [],
         nickname: null,
         selectedAvatarId: DEFAULT_AVATAR_ID,
         unlockedAvatarIds: [DEFAULT_AVATAR_ID],
+        dailyChallengeClaimDate: null,
         linkedEmail: null,
         taskState: createDefaultTaskState(),
         screenState: createDefaultScreenState(),
@@ -1371,6 +1746,9 @@ function createIotCampScreen(container, options = {}) {
         unlockedStyleIds: Array.isArray(currentAccount.unlockedStyleIds) && currentAccount.unlockedStyleIds.length
           ? currentAccount.unlockedStyleIds
           : ["classic"],
+        unlockedSectionIds: Array.isArray(currentAccount.unlockedSectionIds)
+          ? currentAccount.unlockedSectionIds
+          : [],
         nickname: typeof currentAccount.nickname === "string" ? currentAccount.nickname : null,
         selectedAvatarId: typeof currentAccount.selectedAvatarId === "string"
           ? currentAccount.selectedAvatarId
@@ -1378,6 +1756,9 @@ function createIotCampScreen(container, options = {}) {
         unlockedAvatarIds: Array.isArray(currentAccount.unlockedAvatarIds) && currentAccount.unlockedAvatarIds.length
           ? currentAccount.unlockedAvatarIds
           : [DEFAULT_AVATAR_ID],
+        dailyChallengeClaimDate: typeof currentAccount.dailyChallengeClaimDate === "string"
+          ? currentAccount.dailyChallengeClaimDate
+          : null,
         linkedEmail: typeof currentAccount.linkedEmail === "string" ? normalizeEmail(currentAccount.linkedEmail) : null,
         taskState: {
           ...createDefaultTaskState(),
@@ -1404,9 +1785,11 @@ function createIotCampScreen(container, options = {}) {
         styleTokens: 0,
         selectedStyleId: "classic",
         unlockedStyleIds: ["classic"],
+        unlockedSectionIds: [],
         nickname: null,
         selectedAvatarId: DEFAULT_AVATAR_ID,
         unlockedAvatarIds: [DEFAULT_AVATAR_ID],
+        dailyChallengeClaimDate: null,
         linkedEmail: null,
         taskState: createDefaultTaskState(),
         screenState: createDefaultScreenState(),
@@ -1418,10 +1801,7 @@ function createIotCampScreen(container, options = {}) {
 
   function sanitizeLockedSectionProgress() {
     sections.forEach((section, sectionIndex) => {
-      const sectionUnlocked = sectionIndex === 0 || sections[sectionIndex - 1].tasks.every((task) => {
-        const previousTaskState = state.taskState[task.id];
-        return previousTaskState?.completed;
-      });
+      const sectionUnlocked = isSectionUnlocked(sectionIndex);
 
       if (sectionUnlocked) {
         return;
@@ -1468,9 +1848,11 @@ function createIotCampScreen(container, options = {}) {
       styleTokens: state.styleTokens,
       selectedStyleId: state.selectedStyleId,
       unlockedStyleIds: state.unlockedStyleIds,
+      unlockedSectionIds: state.unlockedSectionIds,
       nickname: state.nickname,
       selectedAvatarId: state.selectedAvatarId,
       unlockedAvatarIds: state.unlockedAvatarIds,
+      dailyChallengeClaimDate: state.dailyChallengeClaimDate,
       linkedEmail: state.linkedEmail ?? null,
       taskState: state.taskState,
       screenState: state.screenState,
@@ -1485,11 +1867,15 @@ function createIotCampScreen(container, options = {}) {
     state.unlockedStyleIds = Array.isArray(source.unlockedStyleIds) && source.unlockedStyleIds.length
       ? source.unlockedStyleIds
       : ["classic"];
+    state.unlockedSectionIds = Array.isArray(source.unlockedSectionIds)
+      ? source.unlockedSectionIds.filter((sectionId) => getSectionIndexById(sectionId) > 0)
+      : [];
     state.nickname = typeof source.nickname === "string" ? source.nickname : null;
     state.selectedAvatarId = typeof source.selectedAvatarId === "string" ? source.selectedAvatarId : DEFAULT_AVATAR_ID;
     state.unlockedAvatarIds = Array.isArray(source.unlockedAvatarIds) && source.unlockedAvatarIds.length
       ? source.unlockedAvatarIds
       : [DEFAULT_AVATAR_ID];
+    state.dailyChallengeClaimDate = typeof source.dailyChallengeClaimDate === "string" ? source.dailyChallengeClaimDate : null;
     state.linkedEmail = typeof source.linkedEmail === "string" ? normalizeEmail(source.linkedEmail) : null;
     state.taskState = {
       ...createDefaultTaskState(),
@@ -1660,6 +2046,25 @@ function createIotCampScreen(container, options = {}) {
     return sections.reduce((sum, _section, index) => sum + getTaskCounts(index).available, 0);
   }
 
+  function getDailyChallengeTaskId() {
+    const allTasks = getAllTasks();
+
+    if (!allTasks.length) {
+      return null;
+    }
+
+    const seed = buildDateSeed(getTodayKey());
+    return allTasks[seed % allTasks.length]?.id ?? null;
+  }
+
+  function isDailyChallengeTask(taskId) {
+    return taskId === getDailyChallengeTaskId();
+  }
+
+  function hasClaimedDailyChallengeToday() {
+    return state.dailyChallengeClaimDate === getTodayKey();
+  }
+
   function getVerifiedTaskCount(taskState = state.taskState) {
     return getAllTasks().filter((task) => taskState?.[task.id]?.completionType === "verified").length;
   }
@@ -1711,6 +2116,29 @@ function createIotCampScreen(container, options = {}) {
 
   function unlockStyle(styleId) {
     state.unlockedStyleIds = Array.from(new Set([...getUnlockedStyleIds(), styleId]));
+  }
+
+  function getUnlockedSectionIds() {
+    const validIds = new Set(sections.slice(1).map((section) => section.id));
+    const ids = Array.isArray(state.unlockedSectionIds) ? state.unlockedSectionIds.filter((id) => validIds.has(id)) : [];
+    return Array.from(new Set(ids));
+  }
+
+  function isSectionUnlockedByPurchase(sectionIndex) {
+    if (sectionIndex <= 0) {
+      return true;
+    }
+
+    return getUnlockedSectionIds().includes(sections[sectionIndex].id);
+  }
+
+  function unlockSection(sectionId) {
+    state.unlockedSectionIds = Array.from(new Set([...getUnlockedSectionIds(), sectionId]));
+  }
+
+  function getSectionUnlockCost(sectionIndex) {
+    const section = sections[sectionIndex];
+    return SECTION_UNLOCK_COSTS[section?.id] ?? 30;
   }
 
   function getUnlockedAvatarIds() {
@@ -1913,7 +2341,7 @@ function createIotCampScreen(container, options = {}) {
       return true;
     }
 
-    return isSectionCompleted(sectionIndex - 1);
+    return isSectionCompleted(sectionIndex - 1) || isSectionUnlockedByPurchase(sectionIndex);
   }
 
   function isTaskUnlocked(sectionIndex, taskIndex) {
@@ -2207,6 +2635,35 @@ function createIotCampScreen(container, options = {}) {
     render();
   }
 
+  function buySectionUnlock(sectionId) {
+    const sectionIndex = getSectionIndexById(sectionId);
+
+    if (sectionIndex <= 0) {
+      openSection(sectionId);
+      return;
+    }
+
+    if (isSectionUnlocked(sectionIndex)) {
+      openSection(sectionId);
+      return;
+    }
+
+    const cost = getSectionUnlockCost(sectionIndex);
+    if (!hasEnoughStars(cost)) {
+      showMessage(`Na odemceni sekce potrebujes ${cost} hvezdicek.`);
+      return;
+    }
+
+    state.stars -= cost;
+    unlockSection(sectionId);
+    state.screenState.currentView = "section";
+    state.screenState.activeSectionId = sectionId;
+    state.screenState.activeTaskId = null;
+    saveState();
+    render();
+    showMessage(`Sekce ${sections[sectionIndex].title} byla odemcena za ${cost} hvezdicek.`, "success");
+  }
+
   function openTask(taskId) {
     const task = findTask(taskId);
 
@@ -2355,7 +2812,10 @@ function createIotCampScreen(container, options = {}) {
       return;
     }
 
+    taskProgress.submitAttempts = Number(taskProgress.submitAttempts ?? 0) + 1;
+
     if (!isCodeSubmissionValid(taskId)) {
+      saveState();
       showMessage("Reseni zatim nevypada jako uspesny Arduino program.", "error");
       return;
     }
@@ -2376,7 +2836,26 @@ function createIotCampScreen(container, options = {}) {
 
     taskProgress.completed = true;
     taskProgress.completionType = "verified";
-    state.stars += task.points;
+    let rewardStars = task.points;
+    const usedAnyHelp = (taskProgress.openedHelp ?? []).length > 0;
+    const isFirstTrySuccess = (taskProgress.submitAttempts ?? 0) === 1;
+
+    if (!usedAnyHelp) {
+      rewardStars += REWARD_CONFIG.noHelpBonusStars;
+    }
+
+    if (isFirstTrySuccess) {
+      rewardStars += REWARD_CONFIG.firstTryBonusStars;
+    }
+
+    let earnedDailyChallenge = false;
+    if (isDailyChallengeTask(taskId) && !hasClaimedDailyChallengeToday()) {
+      rewardStars += REWARD_CONFIG.dailyChallengeStars;
+      state.dailyChallengeClaimDate = getTodayKey();
+      earnedDailyChallenge = true;
+    }
+
+    state.stars += rewardStars;
     const verifiedTaskCount = getVerifiedTaskCount();
     const earnedStyleToken = verifiedTaskCount > 0 && verifiedTaskCount % STYLE_SHOP_CONFIG.tokenMilestone === 0;
     if (earnedStyleToken) {
@@ -2384,12 +2863,41 @@ function createIotCampScreen(container, options = {}) {
     }
     saveState();
     backToSection();
-    showMessage(
-      earnedStyleToken
-        ? `Reseni uspesne. Ziskano ${task.points} hvezdicek a 1 token stylu.`
-        : `Reseni uspesne. Ziskano ${task.points} hvezdicek.`,
-      "success",
-    );
+    const rewardParts = [`${rewardStars} hvezdicek`];
+    if (earnedStyleToken) {
+      rewardParts.push("1 token stylu");
+    }
+    showMessage(`Reseni uspesne. Ziskano ${rewardParts.join(" a ")}.`, "success");
+  }
+
+  function submitDailyChallenge(taskId) {
+    const task = findTask(taskId);
+
+    if (!task || !isDailyChallengeTask(taskId)) {
+      showMessage("Tento ukol dnes neni denni vyzva.", "error");
+      return;
+    }
+
+    if (hasClaimedDailyChallengeToday()) {
+      showMessage("Denni vyzva uz je dnes splnena.", "info");
+      return;
+    }
+
+    if (!hasCodeDraft(taskId)) {
+      showMessage("Nejdriv vloz kod pro denni vyzvu.", "error");
+      return;
+    }
+
+    if (!isCodeSubmissionValid(taskId)) {
+      showMessage("Kod pro denni vyzvu zatim nevypada spravne.", "error");
+      return;
+    }
+
+    state.dailyChallengeClaimDate = getTodayKey();
+    state.stars += REWARD_CONFIG.dailyChallengeStars;
+    saveState();
+    render();
+    showMessage(`Denni vyzva splnena. Ziskano ${REWARD_CONFIG.dailyChallengeStars} hvezdicek.`, "success");
   }
 
   function resetProgress() {
@@ -2464,6 +2972,11 @@ function createIotCampScreen(container, options = {}) {
 
         if (action === "open-section" && sectionId) {
           openSection(sectionId);
+          return;
+        }
+
+        if (action === "unlock-section" && sectionId) {
+          buySectionUnlock(sectionId);
           return;
         }
 
@@ -2566,6 +3079,11 @@ function createIotCampScreen(container, options = {}) {
           completeTask(taskId);
           return;
         }
+
+        if (action === "submit-daily-challenge" && taskId) {
+          submitDailyChallenge(taskId);
+          return;
+        }
       });
     });
 
@@ -2581,6 +3099,7 @@ function createIotCampScreen(container, options = {}) {
     const adminForm = container.querySelector('[data-role="admin-form"]');
     const codeTextarea = container.querySelector("[data-role='code-submission']");
     const codeCheckButton = container.querySelector("[data-role='code-submit']");
+    const dailyChallengeButton = container.querySelector("[data-role='daily-challenge-submit']");
 
     if (resetButton) {
       resetButton.addEventListener("click", resetProgress);
@@ -2708,6 +3227,7 @@ function createIotCampScreen(container, options = {}) {
           state.styleTokens = 0;
           state.selectedStyleId = "classic";
           state.unlockedStyleIds = ["classic"];
+          state.dailyChallengeClaimDate = null;
           state.linkedEmail = null;
           state.taskState = createDefaultTaskState();
           state.screenState = createDefaultScreenState();
@@ -2729,11 +3249,17 @@ function createIotCampScreen(container, options = {}) {
 
       syncCodeTextareaHeight(codeTextarea);
       codeCheckButton.disabled = !hasCodeDraft(taskId);
+      if (dailyChallengeButton) {
+        dailyChallengeButton.disabled = !hasCodeDraft(taskId) || hasClaimedDailyChallengeToday();
+      }
 
       codeTextarea.addEventListener("input", () => {
         setCodeDraft(taskId, codeTextarea.value);
         syncCodeTextareaHeight(codeTextarea);
         codeCheckButton.disabled = !hasCodeDraft(taskId);
+        if (dailyChallengeButton) {
+          dailyChallengeButton.disabled = !hasCodeDraft(taskId) || hasClaimedDailyChallengeToday();
+        }
       });
 
       document.addEventListener("keydown", (event) => {
@@ -2803,6 +3329,53 @@ function createIotCampScreen(container, options = {}) {
     `;
   }
 
+  function renderRewardGuidePanel() {
+    return `
+      <aside class="shop-panel shop-panel--account">
+        <div class="shop-tabs">
+          <button type="button" class="shop-tabs__tab shop-tabs__tab--active">Odmeny</button>
+        </div>
+        <div class="shop-panel__intro">
+          <p class="eyebrow">PROGRES</p>
+          <h2>Jak ziskavat meny</h2>
+          <p>Za kazdy overeny ukol ziskas hvezdicky. Kazdy treti overeny ukol prida i 1 token stylu.</p>
+        </div>
+        <div class="account-link-status">
+          <strong>Bonusy za ukoly</strong>
+          <p>Bez napovedy: +${REWARD_CONFIG.noHelpBonusStars} hvezdicky. Na prvni pokus: +${REWARD_CONFIG.firstTryBonusStars} hvezdicka.</p>
+        </div>
+      </aside>
+    `;
+  }
+
+  function renderDailyChallengePanel() {
+    const dailyTaskId = getDailyChallengeTaskId();
+    const dailyTask = dailyTaskId ? findTask(dailyTaskId) : null;
+    const isClaimed = hasClaimedDailyChallengeToday();
+
+    if (!dailyTask) {
+      return "";
+    }
+
+    return `
+      <aside class="shop-panel shop-panel--account">
+        <div class="shop-tabs">
+          <button type="button" class="shop-tabs__tab shop-tabs__tab--active">Denni vyzva</button>
+        </div>
+        <div class="shop-panel__intro">
+          <p class="eyebrow">FARMA HVEZD</p>
+          <h2>${escapeHtml(dailyTask.title)}</h2>
+          <p>Dnesni bonus ziskas za odevzdani platneho kodu k tomuto ukolu. Funguje i u uz driv splnenych ukolu.</p>
+        </div>
+        <div class="account-link-status">
+          <strong>${isClaimed ? "Dnes uz splneno" : `Odmena: +${REWARD_CONFIG.dailyChallengeStars} hvezdicek`}</strong>
+          <p>${isClaimed ? "Zitra se objevi nova denni vyzva." : "Otevri tenhle ukol a odevzdej znovu funkcni kod."}</p>
+        </div>
+        <button type="button" class="ghost-button" data-action="open-task" data-task-id="${dailyTask.id}">Otevrit denni vyzvu</button>
+      </aside>
+    `;
+  }
+
   function renderStyleShopPanel() {
     const selectedStyle = getSelectedStyle();
     const isOpen = Boolean(state.screenState.styleShopOpen);
@@ -2822,7 +3395,6 @@ function createIotCampScreen(container, options = {}) {
             <strong>${escapeHtml(style.label)}</strong>
             <span>${unlocked ? (isActive ? "Pouzivas" : "Odemceno") : "Zamceno"}</span>
           </div>
-          <p>${escapeHtml(style.description)}</p>
           <button
             type="button"
             data-action="${buttonAction}"
@@ -2959,6 +3531,8 @@ function createIotCampScreen(container, options = {}) {
         </div>
         <div class="overview-layout__side">
           ${renderStyleShopPanel()}
+          ${isAdminPreview() ? "" : renderDailyChallengePanel()}
+          ${isAdminPreview() ? "" : renderRewardGuidePanel()}
           ${isAdminPreview() ? "" : renderAccountLinkPanel()}
         </div>
       </div>
@@ -2969,6 +3543,8 @@ function createIotCampScreen(container, options = {}) {
     return sections.map((section, sectionIndex) => {
       const counts = getTaskCounts(sectionIndex);
       const sectionUnlocked = isSectionUnlocked(sectionIndex);
+      const unlockCost = getSectionUnlockCost(sectionIndex);
+      const canBuyUnlock = !sectionUnlocked && !isAdminPreview() && sectionIndex > 0;
       const progressPercent = counts.total ? Math.round((counts.completed / counts.total) * 100) : 0;
       const tasksMarkup = section.tasks.map((task, taskIndex) => {
         const unlocked = isTaskUnlocked(sectionIndex, taskIndex);
@@ -2991,7 +3567,7 @@ function createIotCampScreen(container, options = {}) {
       }).join("");
 
       return `
-        <button class="section-card section-card--${section.accent} ${sectionUnlocked ? "section-card--clickable" : "section-card--locked"}" type="button" data-action="open-section" data-section-id="${section.id}" ${sectionUnlocked ? "" : "disabled"}>
+        <section class="section-card section-card--${section.accent} ${sectionUnlocked ? "" : "section-card--locked"}">
           <div class="section-card__header">
             <div class="section-card__icon">${section.icon}</div>
             <div>
@@ -3003,13 +3579,29 @@ function createIotCampScreen(container, options = {}) {
           <div class="section-card__tasks">
             ${tasksMarkup}
           </div>
+          ${canBuyUnlock ? `
+            <div class="section-card__unlock-note">
+              Predchozi sekci muzes bud dokoncit, nebo tuhle otevrit za ${unlockCost} hvezdicek.
+            </div>
+          ` : ""}
           <div class="section-card__footer">
             <div class="progress-bar">
               <span style="width:${progressPercent}%"></span>
             </div>
             <strong>${counts.completed}/${counts.total} splneno</strong>
           </div>
-        </button>
+          <div class="section-card__actions">
+            <button
+              class="${sectionUnlocked ? "" : "ghost-button"}"
+              type="button"
+              data-action="${sectionUnlocked ? "open-section" : "unlock-section"}"
+              data-section-id="${section.id}"
+              ${!sectionUnlocked && !canBuyUnlock ? "disabled" : ""}
+            >
+              ${sectionUnlocked ? "Otevrit sekci" : `Odemknout za ${unlockCost} &#9733;`}
+            </button>
+          </div>
+        </section>
       `;
     }).join("");
   }
@@ -3058,7 +3650,7 @@ function createIotCampScreen(container, options = {}) {
         </div>
         <h2>${escapeHtml(section.title)}</h2>
         <p class="detail-card__meta">${escapeHtml(section.subtitle)}</p>
-        <p class="detail-card__meta">Kliknout jde jen na splnene ukoly a na prave aktivni ukol. Dalsi se odemykaji postupne podle postupu.</p>
+        <p class="detail-card__meta">Kliknout jde jen na splnene ukoly a na prave aktivni ukol. Dalsi ukoly v sekci se odemykaji postupne podle postupu.</p>
         <div class="task-row-list">
           ${tasksMarkup}
         </div>
@@ -3102,6 +3694,7 @@ function createIotCampScreen(container, options = {}) {
       : !hasSolutionHelp && !hasEnoughStars(state.config.skipCost);
     const codeDraft = getCodeDraft(task.id);
     const canSubmitCode = codeDraft.trim().length > 0 && !taskProgress.completed;
+    const canSubmitDailyChallenge = codeDraft.trim().length > 0 && isDailyChallengeTask(task.id) && !hasClaimedDailyChallengeToday();
     const activeHelpType = state.screenState.activeHelpType ?? null;
     const statusText = isAdminPreview()
       ? "Admin nahled"
@@ -3211,7 +3804,10 @@ function createIotCampScreen(container, options = {}) {
             data-task-id="${task.id}"
             placeholder="Sem se bude vkladat Arduino kod pro kontrolu."
           >${escapeHtml(codeDraft)}</textarea>
-          <p class="code-check-panel__note">Kontrola patri k ukolu, ktery se sklada ze zapojeni obvodu a programu.</p>
+          <p class="code-check-panel__note">Kontrola patri k ukolu, ktery se sklada ze zapojeni obvodu a programu. Bez napovedy ziskas +${REWARD_CONFIG.noHelpBonusStars} a na prvni pokus +${REWARD_CONFIG.firstTryBonusStars}.</p>
+          ${isDailyChallengeTask(task.id) ? `
+            <p class="code-check-panel__note">${hasClaimedDailyChallengeToday() ? "Denni vyzva uz je dnes splnena." : `Tenhle ukol je dnesni denni vyzva za +${REWARD_CONFIG.dailyChallengeStars} hvezdicek.`}</p>
+          ` : ""}
         </div>
         <div class="detail-card__actions detail-card__actions--single">
           <button
@@ -3221,6 +3817,16 @@ function createIotCampScreen(container, options = {}) {
             data-task-id="${task.id}"
             ${canSubmitCode ? "" : "disabled"}
           >Zkontrolovat</button>
+          ${isDailyChallengeTask(task.id) ? `
+            <button
+              type="button"
+              class="ghost-button"
+              data-action="submit-daily-challenge"
+              data-role="daily-challenge-submit"
+              data-task-id="${task.id}"
+              ${canSubmitDailyChallenge ? "" : "disabled"}
+            >Odevzdat denni vyzvu</button>
+          ` : ""}
         </div>
         <div class="task-nav">
           <button type="button" class="ghost-button task-nav__button" data-action="open-task" data-task-id="${previousTaskId ?? ""}" ${previousTaskId ? "" : "disabled"}>&larr; Predchozi</button>
@@ -3326,7 +3932,11 @@ function createIotCampScreen(container, options = {}) {
   function renderApp() {
     let bodyContent = "";
     const selectedAvatar = getSelectedAvatar();
-    const profileNickname = state.nickname ?? buildNicknameFromEmail(state.linkedEmail || state.currentEmail || "");
+    const profileLabel = state.linkedEmail || state.currentEmail
+      ? (state.nickname ?? buildNicknameFromEmail(state.linkedEmail || state.currentEmail || ""))
+      : state.currentStudentNumber
+        ? `Student ${state.currentStudentNumber}`
+        : "Student";
 
     if (state.screenState.currentView === "task" && state.screenState.activeTaskId) {
       bodyContent = renderTaskView(state.screenState.activeTaskId);
@@ -3341,14 +3951,14 @@ function createIotCampScreen(container, options = {}) {
         <div class="app-shell__corner">
           <button type="button" class="ghost-button app-shell__back-button" data-action="logout-student">&larr; Zpet</button>
         </div>
-        ${!isAdminPreview() && (state.linkedEmail || state.currentEmail) ? `
+        ${!isAdminPreview() && (state.linkedEmail || state.currentEmail || state.currentStudentNumber) ? `
           <button type="button" class="profile-chip" data-action="open-profile-panel">
             <span class="profile-chip__avatar">
               ${renderAvatarImage(selectedAvatar, "avatar-image--sm")}
             </span>
-            <span class="profile-chip__name">${escapeHtml(profileNickname)}</span>
+            <span class="profile-chip__name">${escapeHtml(profileLabel)}</span>
           </button>
-          ${state.screenState.profileMenuOpen ? renderProfileMenu() : ""}
+          ${(state.linkedEmail || state.currentEmail) && state.screenState.profileMenuOpen ? renderProfileMenu() : ""}
         ` : ""}
         ${renderCurrencyBar()}
         ${isAdminPreview() ? `
