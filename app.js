@@ -1,17 +1,19 @@
 const IOT_CAMP_STORAGE_KEY = "iot-camp-screen-state";
-const CONFIG_VERSION = 1;
+const CONFIG_VERSION = 4;
 const DAILY_ACCESS_MODE = "manual";
+const MAX_STUDENTS_LIMIT = 25;
 const DEFAULT_CONFIG = {
   dailyPin: "123",
   lecturerPin: "2468",
   adminPassword: "321",
   maxStudents: 15,
-  helpCodeCost: 5,
-  helpWiringCost: 5,
-  skipCost: 5,
+  helpCodeCost: 15,
+  helpWiringCost: 15,
+  skipCost: 30,
 };
 
 const PREVIEW_ALLOW_ANY_PIN = false;
+const REQUIRE_LECTURER_PIN_FOR_CHECK = false;
 
 const LEVEL_BADGES = [
   { id: "prvni-led", label: "PRVNI LED", icon: "🏆" },
@@ -20,7 +22,500 @@ const LEVEL_BADGES = [
   { id: "expert", label: "EXPERT", icon: "✦" },
 ];
 
-const sections = [
+const TASK_SOLUTIONS = {
+  "beginner-led": `// C++ code
+//
+int X = 0;
+
+void setup()
+{
+  pinMode(7, INPUT);
+  pinMode(8, OUTPUT);
+}
+
+void loop()
+{
+  X = digitalRead(7);
+  if (X == 1) {
+    digitalWrite(8, HIGH);
+  } else {
+    digitalWrite(8, LOW);
+  }
+  delay(500); // Wait for 500 millisecond(s)
+}`,
+  "beginner-potentiometer": `// C++ code
+//
+int X = 0;
+
+void setup()
+{
+  pinMode(A3, INPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  X = analogRead(A3);
+  Serial.println(X);
+  delay(500); // Wait for 500 millisecond(s)
+}`,
+  "beginner-and-or": `// C++ code
+//
+int A = 0;
+int B = 0;
+
+void setup()
+{
+  pinMode(2, INPUT);
+  pinMode(3, INPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+}
+
+void loop()
+{
+  A = digitalRead(2);
+  B = digitalRead(3);
+
+  if (A == 1 || B == 1) {
+    digitalWrite(8, HIGH);
+  } else {
+    digitalWrite(8, LOW);
+  }
+
+  if (A == 1 && B == 1) {
+    digitalWrite(9, HIGH);
+  } else {
+    digitalWrite(9, LOW);
+  }
+}`,
+  "beginner-traffic-light": `// C++ code
+//
+void setup()
+{
+  pinMode(9, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(7, OUTPUT);
+}
+
+void loop()
+{
+  digitalWrite(9, HIGH);
+  delay(3000); // Wait for 3000 millisecond(s)
+  digitalWrite(8, HIGH);
+  delay(1000); // Wait for 1000 millisecond(s)
+  digitalWrite(9, LOW);
+  digitalWrite(8, LOW);
+  digitalWrite(7, HIGH);
+  delay(3000); // Wait for 3000 millisecond(s)
+  digitalWrite(7, LOW);
+  digitalWrite(8, HIGH);
+  delay(1000); // Wait for 1000 millisecond(s)
+  digitalWrite(8, LOW);
+}`,
+  "beginner-buzzer-button": `// C++ code
+//
+int tlacitko = 0;
+
+void setup()
+{
+  pinMode(7, INPUT);
+}
+
+void loop()
+{
+  tlacitko = digitalRead(7);
+  if (tlacitko == 1) {
+    tone(8, 440, 200);
+  } else {
+    noTone(8);
+  }
+  delay(50); // Wait for 50 millisecond(s)
+}`,
+  "beginner-light-sensor": `// C++ code
+//
+int svetlo = 0;
+
+void setup()
+{
+  pinMode(A0, INPUT);
+  pinMode(9, OUTPUT);
+}
+
+void loop()
+{
+  svetlo = analogRead(A0);
+  if (svetlo < 400) {
+    digitalWrite(9, HIGH);
+  } else {
+    digitalWrite(9, LOW);
+  }
+  delay(100); // Wait for 100 millisecond(s)
+}`,
+  "advanced-stair-light": `// C++ code
+//
+unsigned long casPoslednihoStisku = 0;
+
+void setup()
+{
+  pinMode(2, INPUT);
+  pinMode(3, INPUT);
+  pinMode(8, OUTPUT);
+}
+
+void loop()
+{
+  if (digitalRead(2) == 1 || digitalRead(3) == 1) {
+    digitalWrite(8, HIGH);
+    casPoslednihoStisku = millis();
+  }
+
+  if (millis() - casPoslednihoStisku > 3000) {
+    digitalWrite(8, LOW);
+  }
+}`,
+  "advanced-crosswalk": `// C++ code
+//
+void setup()
+{
+  pinMode(2, INPUT);
+  pinMode(7, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+}
+
+void loop()
+{
+  digitalWrite(7, HIGH);
+  digitalWrite(8, LOW);
+  digitalWrite(9, LOW);
+
+  if (digitalRead(2) == 1) {
+    digitalWrite(7, LOW);
+    digitalWrite(8, HIGH);
+    delay(1000);
+    digitalWrite(8, LOW);
+    digitalWrite(9, HIGH);
+    delay(3000);
+    digitalWrite(9, LOW);
+    digitalWrite(8, HIGH);
+    delay(1000);
+    digitalWrite(8, LOW);
+  }
+}`,
+  "advanced-parking": `// C++ code
+//
+int X = 0;
+
+long readUltrasonicDistance(int triggerPin, int echoPin)
+{
+  pinMode(triggerPin, OUTPUT);
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  pinMode(echoPin, INPUT);
+  return pulseIn(echoPin, HIGH);
+}
+
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(3, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+}
+
+void loop()
+{
+  X = 0.01723 * readUltrasonicDistance(7, 7);
+  Serial.println(X);
+  if (X > 20) {
+    digitalWrite(3, HIGH);
+    digitalWrite(4, LOW);
+    digitalWrite(5, LOW);
+  } else if (X > 5) {
+    digitalWrite(3, LOW);
+    digitalWrite(4, HIGH);
+    digitalWrite(5, LOW);
+  } else {
+    digitalWrite(3, LOW);
+    digitalWrite(4, LOW);
+    digitalWrite(5, HIGH);
+  }
+  delay(100); // Wait for 100 millisecond(s)
+}`,
+  "advanced-motion": `// C++ code
+//
+int pohyb = 0;
+
+void setup()
+{
+  pinMode(2, INPUT);
+  pinMode(8, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  pohyb = digitalRead(2);
+  if (pohyb == 1) {
+    digitalWrite(8, HIGH);
+    Serial.println("Pohyb detekovan");
+  } else {
+    digitalWrite(8, LOW);
+  }
+  delay(100); // Wait for 100 millisecond(s)
+}`,
+  "advanced-temperature-alarm": `// C++ code
+//
+int teplota = 0;
+
+void setup()
+{
+  pinMode(A1, INPUT);
+  pinMode(10, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(8, OUTPUT);
+}
+
+void loop()
+{
+  teplota = analogRead(A1);
+  if (teplota < 250) {
+    digitalWrite(10, HIGH);
+    digitalWrite(9, LOW);
+    digitalWrite(8, LOW);
+  } else if (teplota < 450) {
+    digitalWrite(10, LOW);
+    digitalWrite(9, HIGH);
+    digitalWrite(8, LOW);
+  } else {
+    digitalWrite(10, LOW);
+    digitalWrite(9, LOW);
+    digitalWrite(8, HIGH);
+    tone(7, 660, 150);
+  }
+  delay(200); // Wait for 200 millisecond(s)
+}`,
+  "advanced-counter": `// C++ code
+//
+int hodnota = 0;
+
+void setup()
+{
+  pinMode(6, INPUT);
+  pinMode(7, INPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  if (digitalRead(6) == 1) {
+    hodnota++;
+    Serial.println(hodnota);
+    delay(250); // Wait for 250 millisecond(s)
+  }
+  if (digitalRead(7) == 1) {
+    hodnota--;
+    Serial.println(hodnota);
+    delay(250); // Wait for 250 millisecond(s)
+  }
+}`,
+  "expert-servo": `// C++ code
+//
+#include <Servo.h>
+
+int X = 0;
+int Y = 0;
+Servo servo_3;
+
+void setup()
+{
+  pinMode(A5, INPUT);
+  Serial.begin(9600);
+  servo_3.attach(3, 500, 2500);
+}
+
+void loop()
+{
+  Y = analogRead(A5);
+  X = map(Y, 0, 1023, 0, 180);
+  Serial.println(X);
+  servo_3.write(X);
+  delay(10); // Delay a little bit to improve simulation performance
+}`,
+  "expert-servo-loop": `// C++ code
+//
+#include <Servo.h>
+
+int x = 0;
+Servo servo_3;
+
+void setup()
+{
+  servo_3.attach(3, 500, 2500);
+}
+
+void loop()
+{
+  x = 0;
+  while (x < 180) {
+    x = (x + 1);
+    servo_3.write(x);
+    delay(20); // Wait for 20 millisecond(s)
+  }
+  while (x > 1) {
+    x = (x - 1);
+    servo_3.write(x);
+    delay(20); // Wait for 20 millisecond(s)
+  }
+}`,
+  "expert-rgb-loop": `// C++ code
+//
+int x = 0;
+int y = 0;
+int z = 0;
+
+void setup()
+{
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  pinMode(A2, INPUT);
+  pinMode(3, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+}
+
+void loop()
+{
+  x = analogRead(A0);
+  y = analogRead(A1);
+  z = analogRead(A2);
+  analogWrite(3, x / 4);
+  analogWrite(5, y / 4);
+  analogWrite(6, z / 4);
+  delay(10); // Delay a little bit to improve simulation performance
+}`,
+  "expert-reaction-game": `// C++ code
+//
+void setup()
+{
+  pinMode(2, INPUT);
+  pinMode(8, OUTPUT);
+  Serial.begin(9600);
+  randomSeed(analogRead(A0));
+}
+
+void loop()
+{
+  if (digitalRead(2) == 1) {
+    Serial.println("Nedrz tlacitko predem");
+    delay(1000);
+    return;
+  }
+
+  delay(random(2000, 5000));
+  digitalWrite(8, HIGH);
+
+  while (digitalRead(2) == 0) {
+  }
+
+  Serial.println("Stisknuto");
+  digitalWrite(8, LOW);
+  delay(1000);
+}`,
+  "expert-led-roulette": `// C++ code
+//
+int leds[] = {3, 4, 5, 6};
+int index = 0;
+int cil = 0;
+
+void setup()
+{
+  pinMode(2, INPUT);
+  pinMode(3, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  randomSeed(analogRead(A0));
+}
+
+void loop()
+{
+  if (digitalRead(2) == 1) {
+    cil = random(12, 24);
+    for (int krok = 0; krok < cil; krok++) {
+      digitalWrite(leds[index], LOW);
+      index = (index + 1) % 4;
+      digitalWrite(leds[index], HIGH);
+      delay(60 + krok * 20);
+    }
+  }
+}`,
+  "expert-arduino-piano": `// C++ code
+//
+void setup()
+{
+  pinMode(2, INPUT);
+  pinMode(3, INPUT);
+  pinMode(4, INPUT);
+}
+
+void loop()
+{
+  if (digitalRead(2) == 1) {
+    tone(8, 262, 120);
+  } else if (digitalRead(3) == 1) {
+    tone(8, 330, 120);
+  } else if (digitalRead(4) == 1) {
+    tone(8, 392, 120);
+  } else {
+    noTone(8);
+  }
+  delay(20); // Wait for 20 millisecond(s)
+}`,
+  "expert-smart-barrier": `// C++ code
+//
+#include <Servo.h>
+
+int vzdalenost = 0;
+
+long readUltrasonicDistance(int triggerPin, int echoPin)
+{
+  pinMode(triggerPin, OUTPUT);
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  pinMode(echoPin, INPUT);
+  return pulseIn(echoPin, HIGH);
+}
+
+Servo servo_5;
+
+void setup()
+{
+  servo_5.attach(5, 500, 2500);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  vzdalenost = 0.01723 * readUltrasonicDistance(7, 7);
+  Serial.println(vzdalenost);
+  if (vzdalenost < 15) {
+    servo_5.write(90);
+  } else {
+    servo_5.write(0);
+  }
+  delay(100); // Wait for 100 millisecond(s)
+}`,
+};
+
+const legacySections = [
   {
     id: "beginner",
     title: "Zacatecnik",
@@ -33,21 +528,21 @@ const sections = [
         title: "Blikani LED",
         description: "Demo karta pro preview vzhledu. Pozdeji ji nahradime tvym skutecnym ukolem.",
         hint: "Napoveda pro ukol bude doplnena pozdeji.",
-        points: 10,
+        points: 5,
       },
       {
         id: "b2",
         title: "Cteni vstupu",
         description: "Demo karta pro preview vzhledu. Pozdeji ji nahradime tvym skutecnym ukolem.",
         hint: "Napoveda pro ukol bude doplnena pozdeji.",
-        points: 10,
+        points: 5,
       },
       {
         id: "b3",
         title: "Seriova komunikace",
         description: "Demo karta pro preview vzhledu. Pozdeji ji nahradime tvym skutecnym ukolem.",
         hint: "Napoveda pro ukol bude doplnena pozdeji.",
-        points: 10,
+        points: 5,
       },
     ],
   },
@@ -63,21 +558,21 @@ const sections = [
         title: "MQTT Broker",
         description: "Demo karta pro preview vzhledu. Pozdeji ji nahradime tvym skutecnym ukolem.",
         hint: "Napoveda pro ukol bude doplnena pozdeji.",
-        points: 15,
+        points: 5,
       },
       {
         id: "a2",
         title: "ESP32 Server",
         description: "Demo karta pro preview vzhledu. Pozdeji ji nahradime tvym skutecnym ukolem.",
         hint: "Napoveda pro ukol bude doplnena pozdeji.",
-        points: 15,
+        points: 5,
       },
       {
         id: "a3",
         title: "OLED displej",
         description: "Demo karta pro preview vzhledu. Pozdeji ji nahradime tvym skutecnym ukolem.",
         hint: "Napoveda pro ukol bude doplnena pozdeji.",
-        points: 20,
+        points: 5,
       },
     ],
   },
@@ -93,21 +588,468 @@ const sections = [
         title: "Vlastni PCB",
         description: "Demo karta pro preview vzhledu. Pozdeji ji nahradime tvym skutecnym ukolem.",
         hint: "Napoveda pro ukol bude doplnena pozdeji.",
-        points: 20,
+        points: 5,
       },
       {
         id: "e2",
         title: "AI Edge",
         description: "Demo karta pro preview vzhledu. Pozdeji ji nahradime tvym skutecnym ukolem.",
         hint: "Napoveda pro ukol bude doplnena pozdeji.",
-        points: 20,
+        points: 5,
       },
       {
         id: "e3",
         title: "LoRa Mesh",
         description: "Demo karta pro preview vzhledu. Pozdeji ji nahradime tvym skutecnym ukolem.",
         hint: "Napoveda pro ukol bude doplnena pozdeji.",
-        points: 25,
+        points: 5,
+      },
+    ],
+  },
+];
+
+const sections = [
+  {
+    id: "beginner",
+    title: "Zacatecnik",
+    subtitle: "Zaklady Arduino a prvni logika",
+    icon: "🔑",
+    accent: "green",
+    tasks: [
+      {
+        id: "beginner-led",
+        title: "LED",
+        description: "Ovladej prvni LED tlacitkem bez programu a druhou LED pomoci programu v Arduinu.",
+        points: 5,
+        imageLabel: "Arduino UNO + tlacitko + 2 LED diody",
+        goals: [
+          "Ovladej LED1 tlacitkem bez programovani.",
+          "Ovladej LED2 tlacitkem pres Arduino program.",
+        ],
+        wiringHelp: [
+          "Priprav jednu LED ovladanou primo tlacitkem a druhou LED zapojenou na digitalni vystup Arduina.",
+          "Tlacitko pripoj jako vstup a druhou LED nech ridit pres vystupni pin.",
+          "Obe LED zapoj pres rezistory a spoj GND breadboardu s GND na Arduinu.",
+        ],
+        codeHelp: [
+          "V setup nastav pin tlacitka jako INPUT a pin druhe LED jako OUTPUT.",
+          "V loop precti stav tlacitka pomoci digitalRead().",
+          "Kdyz je tlacitko stisknute, nastav LED na HIGH, jinak LOW.",
+        ],
+      },
+      {
+        id: "beginner-potentiometer",
+        title: "Potenciometr",
+        description: "Nacti hodnotu z potenciometru a vypisuj ji do serioveho monitoru.",
+        points: 5,
+        imageLabel: "Potenciometr + LED + seriovy monitor",
+        goals: [
+          "Pripoj potenciometr mezi 5V a GND.",
+          "Stredni vyvod prived na analogovy vstup Arduina.",
+          "Hodnotu vypisuj do serioveho monitoru.",
+        ],
+        wiringHelp: [
+          "Krajni vyvody potenciometru ved na 5V a GND.",
+          "Stredni vyvod zapoj na analogovy pin, podle referencniho ukolu treba A3.",
+          "LED muze slouzit jako jednoducha indikace na vystupu pres rezistor.",
+        ],
+        codeHelp: [
+          "Spust Serial.begin() v setup().",
+          "V loop cti analogRead() z vybraneho analogoveho pinu.",
+          "Hodnotu vypis pres Serial.println() a pridej kratke delay().",
+        ],
+      },
+      {
+        id: "beginner-and-or",
+        title: "AND - OR",
+        description: "Postav logickou ulohu se dvema vstupy a LED vystupy pro operace AND a OR.",
+        points: 5,
+        imageLabel: "2 tlacitka + 2 LED diody + breadboard",
+        goals: [
+          "Pouzij dve tlacitka jako vstupy A a B.",
+          "Jedna LED se ma chovat jako AND a druha jako OR.",
+          "Vyzkousej vsechny kombinace stisku obou tlacitek.",
+        ],
+        wiringHelp: [
+          "Priprav dve tlacitka jako dva samostatne vstupy a dve LED jako dva vystupy.",
+          "Kazdou LED pripoj pres vlastni rezistor a davej pozor na spravnou orientaci diod.",
+          "Tlacitka museji mit definovany klidovy stav.",
+        ],
+        codeHelp: [
+          "Nacti dva vstupy pomoci digitalRead().",
+          "Pro OR rozsvit LED, kdyz je aktivni alespon jeden vstup.",
+          "Pro AND rozsvit LED jen tehdy, kdyz jsou aktivni oba vstupy najednou.",
+        ],
+      },
+      {
+        id: "beginner-traffic-light",
+        title: "Semafor",
+        description: "Rozblikej semafor se tremi LED v klasickem cyklu cervena - oranzova - zelena.",
+        points: 5,
+        imageLabel: "3 LED diody jako semafor",
+        goals: [
+          "Pouzij cervenou, oranzovou a zelenou LED.",
+          "Vytvor opakovany semaforovy cyklus v programu.",
+          "Dodrz poradi svetel podle zadani.",
+        ],
+        wiringHelp: [
+          "Kazdou LED dej na vlastni digitalni vystup pres rezistor.",
+          "Spoj vsechny zaporne vetve s GND.",
+          "Barvy LED si oznac tak, aby bylo jasne, ktera je cervena, oranzova a zelena.",
+        ],
+        codeHelp: [
+          "V setup nastav tri vystupni piny jako OUTPUT.",
+          "V loop postupne prepinaj LED pomoci digitalWrite().",
+          "Mezi jednotlivymi stavy pouzij delay() podle pozadovane delky svetel.",
+        ],
+      },
+      {
+        id: "beginner-buzzer-button",
+        title: "Tlacitko + buzzer",
+        description: "Po stisku tlacitka spust zvuk na buzzeru, po pusteni se ma zvuk zastavit.",
+        points: 5,
+        imageLabel: "Tlacitko + piezo buzzer + Arduino UNO",
+        goals: [
+          "Zapoj jedno tlacitko jako vstup.",
+          "Po stisku tlacitka aktivuj buzzer.",
+          "Po pusteni tlacitka se ma zvuk vypnout.",
+        ],
+        wiringHelp: [
+          "Tlacitko zapoj na samostatny digitalni vstup s definovanym klidovym stavem.",
+          "Piezo buzzer pripoj na vystupni pin a GND.",
+          "Dohlidni na spolecnou zem a prehledne vedeni vodicu na breadboardu.",
+        ],
+        codeHelp: [
+          "V setup nastav tlacitko jako INPUT a buzzer jako OUTPUT.",
+          "V loop cti stav tlacitka pres digitalRead().",
+          "Pri stisku pouzij tone() nebo digitalWrite() pro aktivaci buzzeru, jinak noTone() nebo LOW.",
+        ],
+      },
+      {
+        id: "beginner-light-sensor",
+        title: "Nocni svetlo",
+        description: "Pomoci fotorezistoru rozsvit LED jen tehdy, kdyz je kolem tma.",
+        points: 5,
+        imageLabel: "Fotorezistor + LED + rezistor",
+        goals: [
+          "Zapoj fotorezistor na analogovy vstup.",
+          "Prubezne mer uroven svetla v okoli.",
+          "Pri nizke hodnote rozsvit LED a pri dostatku svetla ji zhasni.",
+        ],
+        wiringHelp: [
+          "Fotorezistor zapoj jako delic napeti s rezistorem a vystup ved na analogovy pin.",
+          "LED pripoj na digitalni nebo PWM vystup pres rezistor.",
+          "Napajeci vetve 5V a GND rozved prehledne po breadboardu.",
+        ],
+        codeHelp: [
+          "V loop cti hodnotu senzoru pomoci analogRead().",
+          "Stanov si hranici, pod kterou budes brat prostredi jako tmu.",
+          "Pomoci if podminky prepinej LED na HIGH a LOW podle zmerene hodnoty.",
+        ],
+      },
+    ],
+  },
+  {
+    id: "advanced",
+    title: "Pokrocily",
+    subtitle: "Vetsi logika, senzory a realne scenare",
+    icon: "⚙",
+    accent: "amber",
+    tasks: [
+      {
+        id: "advanced-stair-light",
+        title: "Schodistove svetlo",
+        description: "Pridaj druhe tlacitko a naprogramuj svetlo tak, aby po poslednim stisku zhaslo az po 3 sekundach.",
+        points: 5,
+        imageLabel: "2 tlacitka + LED s casovanim",
+        goals: [
+          "Pridaj do obvodu druhe tlacitko.",
+          "LED se ma rozsvitit po stisku libovolneho z obou tlacitek.",
+          "Zhasnout ma az 3 sekundy po poslednim stisku.",
+        ],
+        wiringHelp: [
+          "Vychazej ze zapojeni se svetlem a dopln druhe tlacitko jako dalsi vstup.",
+          "Obe tlacitka ved do samostatnych vstupnich pinu.",
+          "LED nech na vystupnim pinu pres rezistor.",
+        ],
+        codeHelp: [
+          "Uloz si cas posledniho stisku do promenne pomoci millis().",
+          "Kdyz je stisknute kterekoli tlacitko, LED rozsvit a aktualizuj cas posledni aktivity.",
+          "LED zhasni az ve chvili, kdy od posledni aktivity ubehly vice nez 3 sekundy.",
+        ],
+      },
+      {
+        id: "advanced-crosswalk",
+        title: "Semafor + prechod",
+        description: "Rozsir semafor o tlacitko pro chodce. Po stisku probehne bezpecny cyklus a pak se vrati zelena pro auta.",
+        points: 5,
+        imageLabel: "Semafor s tlacitkem pro chodce",
+        goals: [
+          "Semafor ma mit trvale zelenou pro auta.",
+          "Po stisku tlacitka spust cyklus oranzova -> cervena -> oranzova -> zelena.",
+          "Po dokonceni se vrat do vychoziho stavu.",
+        ],
+        wiringHelp: [
+          "Pouzij stejne tri LED jako u semaforu a pridej jedno tlacitko pro chodce.",
+          "Tlacitko zapoj jako samostatny vstup.",
+          "LED nech rozdelene na tri samostatne vystupy.",
+        ],
+        codeHelp: [
+          "Ve vychozim stavu nech svitit zelenou.",
+          "Pri stisku tlacitka nespoustej cyklus znovu opakovane, ale jednorazove.",
+          "Cyklus sloz ze sekvence digitalWrite() a delay(), pripadne z jednoducheho stavoveho automatu.",
+        ],
+      },
+      {
+        id: "advanced-parking",
+        title: "Parkovaci system",
+        description: "Pouzij ultrazvukovy snimac, tri LED a pripadne buzzer pro signalizaci vzdalenosti prekazky.",
+        points: 5,
+        imageLabel: "Ultrazvukovy snimac + 3 LED + buzzer",
+        goals: [
+          "Kdyz je objekt daleko, sviti zelena.",
+          "Kdyz je bliz, sviti zluta.",
+          "Kdyz je kriticky blizko, sviti cervena a muze piskat buzzer.",
+        ],
+        wiringHelp: [
+          "Pripoj ultrazvukovy snimac na napajeni a signalni piny podle typu modulu.",
+          "Tri LED dej na tri vystupni piny, kazdou pres rezistor.",
+          "Buzzer zapoj jako dalsi vystup, pokud ho chces pouzit.",
+        ],
+        codeHelp: [
+          "Nejdriv zmer vzdalenost senzorem a uloz ji do promenne.",
+          "Podle hranic, napr. 20 cm a 5 cm, prepinej jednotlive LED.",
+          "Pro kritickou vzdalenost pridej digitalWrite() nebo tone() pro buzzer.",
+        ],
+      },
+      {
+        id: "advanced-motion",
+        title: "Detekce pohybu",
+        description: "Zapoj PIR senzor a vytvor reakci na zaznamenany pohyb.",
+        points: 5,
+        imageLabel: "PIR senzor + Arduino",
+        goals: [
+          "Zapoj PIR senzor jako vstup.",
+          "Pri zaznamenanem pohybu reaguj v programu, treba LED nebo vypisem.",
+          "Over, ze obvod vraci stabilni stav i bez pohybu.",
+        ],
+        wiringHelp: [
+          "PIR senzor pripoj na 5V, GND a vystupni signalni pin.",
+          "Signal senzoru ved na digitalni vstup Arduina.",
+          "Pro test muzes pridat LED na vystupni pin.",
+        ],
+        codeHelp: [
+          "Nastav signalni pin PIR jako INPUT.",
+          "V loop cti stav senzoru pres digitalRead().",
+          "Pri aktivaci proved akci, napr. rozsvit LED nebo vypis zpravu do serioveho monitoru.",
+        ],
+      },
+      {
+        id: "advanced-temperature-alarm",
+        title: "Teplotni alarm",
+        description: "Mer teplotu senzorem a podle hodnoty prepinej LED nebo spust varovani.",
+        points: 5,
+        imageLabel: "Teplotni senzor + 3 LED + buzzer",
+        goals: [
+          "Zapoj teplotni senzor na analogovy vstup.",
+          "Rozdel teploty aspon do tri pasem, napr. nizka, normalni a vysoka.",
+          "Pri vysoke teplote rozsvit cervenou LED nebo spust buzzer.",
+        ],
+        wiringHelp: [
+          "Teplotni senzor pripoj na 5V, GND a analogovy vystup.",
+          "Tri LED dej na samostatne vystupy pres rezistory.",
+          "Buzzer muzes pridat jako doplnek pro kritickou teplotu.",
+        ],
+        codeHelp: [
+          "Nejdriv cti analogovou hodnotu senzoru pomoci analogRead().",
+          "Podle typu senzoru preved hodnotu na orientacni teplotu nebo nastav hranice primo nad analogovymi hodnotami.",
+          "Pomoci if / else prepinej LED a pripadne aktivuj tone() pro alarm.",
+        ],
+      },
+      {
+        id: "advanced-counter",
+        title: "Pocitadlo + a -",
+        description: "Dve tlacitka maji zvetsovat a zmensovat pocitadlo, jehoz hodnotu vypisujes do serioveho monitoru.",
+        points: 5,
+        imageLabel: "2 tlacitka + seriovy monitor",
+        goals: [
+          "Jedno tlacitko zvysi hodnotu o 1.",
+          "Druhe tlacitko ji snizi o 1.",
+          "Po kazde zmene vypis aktualni stav do serioveho monitoru.",
+        ],
+        wiringHelp: [
+          "Priprav dve tlacitka jako dva samostatne vstupy s jasne definovanym klidovym stavem.",
+          "Neni potreba zadny vystupni prvek, pokud budes vysledek sledovat jen v seriovem monitoru.",
+          "Pokud chces, muzes pridat LED jako indikaci zmeny hodnoty.",
+        ],
+        codeHelp: [
+          "Vytvor promennou pro ulozeni aktualni hodnoty pocitadla.",
+          "Pri stisku prvniho tlacitka hodnotu zvetsuj, pri druhem zmensuj.",
+          "Kazdou zmenu vypis pres Serial.println() a osetri kratke zpozdeni proti vice stiskum.",
+        ],
+      },
+    ],
+  },
+  {
+    id: "expert",
+    title: "Expert",
+    subtitle: "Plynuly pohyb, mapovani a herni logika",
+    icon: "🚀",
+    accent: "purple",
+    tasks: [
+      {
+        id: "expert-servo",
+        title: "Servo motor",
+        description: "Ovladej servo pomoci potenciometru a mapuj analogovou hodnotu na rozsah uhlu serva.",
+        points: 5,
+        imageLabel: "Servo + potenciometr + seriovy monitor",
+        goals: [
+          "Nacti hodnotu z potenciometru.",
+          "Preved ji na uhel serva v rozsahu 0 az 180.",
+          "Otacej servem podle aktualni hodnoty.",
+        ],
+        wiringHelp: [
+          "Potenciometr zapoj mezi 5V a GND, stredni vyvod dej na analogovy vstup.",
+          "Servo pripoj na napajeni, zem a signalni pin.",
+          "Signal serva ved na vhodny ridici pin a spoj vsechny zeme dohromady.",
+        ],
+        codeHelp: [
+          "Pouzij knihovnu Servo a vytvor objekt serva.",
+          "Nacti analogRead() z potenciometru a preved hodnotu pomoci map().",
+          "Odesli vysledek do serva pomoci write().",
+        ],
+      },
+      {
+        id: "expert-servo-loop",
+        title: "Loop servo",
+        description: "Rozhybej servo sem a tam v plynule smycce a rid jeho pohyb v obou smerech.",
+        points: 5,
+        imageLabel: "Servo v plynulem loopu",
+        goals: [
+          "Vytvor plynuly pohyb serva od minima do maxima.",
+          "Po dosazeni kraje obrat smer.",
+          "Pohyb opakuj donekonecna.",
+        ],
+        wiringHelp: [
+          "Pouzij jednoduche zapojeni serva s napajenim a signalnim pinem.",
+          "Napajeni serva nech stabilni a spolecnou zem spoj s Arduinem.",
+          "Neni potreba dalsi vstup, pokud servo neni rizene potenciometrem.",
+        ],
+        codeHelp: [
+          "Udrzuj aktualni uhel v promenne a v kazdem kroku jej zvetsuj nebo zmensuj.",
+          "Pri dosazeni hranic 0 a 180 obrat smer pohybu.",
+          "Mezi kroky nech male delay() pro plynuly efekt.",
+        ],
+      },
+      {
+        id: "expert-rgb-loop",
+        title: "Loop RGB",
+        description: "Namixuj barvu RGB LED pomoci tri potenciometru a tri analogovych vstupu.",
+        points: 5,
+        imageLabel: "RGB LED + 3 potenciometry",
+        goals: [
+          "Pouzij tri potenciometry pro tri barevne kanaly.",
+          "Cti tri analogove vstupy.",
+          "Nastav intenzitu cervene, zelene a modre slozky LED.",
+        ],
+        wiringHelp: [
+          "RGB LED pripoj na tri vystupni piny pres rezistory.",
+          "Kazdy potenciometr zapoj mezi 5V a GND, stredni vyvod vede na vlastni analogovy vstup.",
+          "Dohlidni na spravnou orientaci RGB LED a spolecnou zem.",
+        ],
+        codeHelp: [
+          "Cti hodnoty z tri analogovych vstupu, napr. A0, A1 a A2.",
+          "Podle hodnot nastav vystupy pomoci analogWrite().",
+          "Pokud je treba, hodnoty zmapuj na rozsah 0 az 255.",
+        ],
+      },
+      {
+        id: "expert-reaction-game",
+        title: "Reakcni hra",
+        description: "Po nahodne dobe se rozsviti LED. Hrac musi co nejrychleji zmacknout tlacitko, jinak prohraje nebo podvadi.",
+        points: 5,
+        imageLabel: "LED + tlacitko + nahodne zpozdeni",
+        goals: [
+          "LED se ma rozsvitit po nahodne dobe, treba 2 az 5 sekund.",
+          "Po rozsviceni ma hrac stisknout tlacitko co nejrychleji.",
+          "Kdyz drzi tlacitko predem, ukol se nema povest.",
+        ],
+        wiringHelp: [
+          "Pouzij jednu LED na vystupu a jedno tlacitko na vstupu.",
+          "Tlacitko musi mit jasne definovany klidovy stav.",
+          "LED pripoj pres rezistor a mysli na spolecnou zem.",
+        ],
+        codeHelp: [
+          "Vygeneruj nahodne cekani pomoci random() a vyckej na rozsviceni LED.",
+          "Pred startem kontroluj, jestli hrac nedrzi tlacitko.",
+          "Po rozsviceni LED mer dobu do stisku a podle vysledku oznam uspech nebo podvadeni.",
+        ],
+      },
+      {
+        id: "expert-led-roulette",
+        title: "LED ruleta",
+        description: "Vytvor radu LED, ktera se po stisku tlacitka nejdriv rozjede, pak zpomali a zastavi na nahodne diode.",
+        points: 5,
+        imageLabel: "Bezici rada LED + tlacitko",
+        goals: [
+          "Vytvor efekt beziciho svetla pres vice LED diod.",
+          "Po stisku tlacitka se rozjezd zrychli a pak zacne zpomalovat.",
+          "Na konci se zastav na nahodne vybrane LED.",
+        ],
+        wiringHelp: [
+          "Priprav radu vice LED na samostatnych vystupnich pinech.",
+          "Tlacitko pridej jako spoustec sekvence.",
+          "Kazdou LED pripoj pres vlastni rezistor.",
+        ],
+        codeHelp: [
+          "Ukladej si seznam vystupnich pinu LED do pole.",
+          "Postupne rozsvecuj jednotlive LED s menicim se zpozdenim mezi kroky.",
+          "Pred koncem zpomaluj a ukonci animaci na nahodne zvolenem indexu.",
+        ],
+      },
+      {
+        id: "expert-arduino-piano",
+        title: "Arduino piano",
+        description: "Pomoci vice tlacitek zahraj na buzzer ruzne tony jako jednoduche mini piano.",
+        points: 5,
+        imageLabel: "3 tlacitka + piezo buzzer",
+        goals: [
+          "Kazde tlacitko ma spustit jiny ton.",
+          "Kdyz neni stisknute zadne tlacitko, buzzer nehraje.",
+          "Otestuj, ze lze zahrat vice ruznych tonu podle vstupu.",
+        ],
+        wiringHelp: [
+          "Zapoj vice tlacitek na samostatne vstupni piny.",
+          "Piezo buzzer pripoj na vystupni pin a GND.",
+          "Tlacitka zapoj tak, aby mela stabilni klidovy stav a vzajemne se nerusila.",
+        ],
+        codeHelp: [
+          "V loop postupne kontroluj jednotliva tlacitka pres digitalRead().",
+          "Kazdemu tlacitku prirad jinou frekvenci v tone().",
+          "Pokud neni aktivni zadne tlacitko, vypni zvuk pomoci noTone().",
+        ],
+      },
+      {
+        id: "expert-smart-barrier",
+        title: "Automaticka zavora",
+        description: "Spoj ultrazvukovy senzor a servo tak, aby se zavora otevrela pri prijezdu auta a po chvili zase zavrela.",
+        points: 5,
+        imageLabel: "Ultrazvukovy senzor + servo + LED signalizace",
+        goals: [
+          "Zmer vzdalenost prijizdejiciho objektu.",
+          "Kdyz je objekt dost blizko, otevri servo zavoru.",
+          "Po odjezdu nebo po kratkem case vrat servo do zavrene polohy.",
+        ],
+        wiringHelp: [
+          "Pripoj ultrazvukovy senzor na napajeni a signalni piny.",
+          "Servo zapoj na napajeni, GND a signalni vystup.",
+          "Pro lepsi orientaci muzes pridat LED, ktera ukaze stav otevreno nebo zavreno.",
+        ],
+        codeHelp: [
+          "Pouzij funkci pro mereni vzdalenosti podobne jako u parkovaciho systemu.",
+          "Podle zmerene hodnoty nastav servo do otevrene nebo zavrene polohy.",
+          "Pro stabilnejsi chovani dopln podminku s millis() nebo kratkym delay() mezi zmenami stavu.",
+        ],
       },
     ],
   },
@@ -141,6 +1083,29 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
+function hasAll(text, patterns) {
+  return patterns.every((pattern) => text.includes(pattern));
+}
+
+function hasAny(text, patterns) {
+  return patterns.some((pattern) => text.includes(pattern));
+}
+
+function countMatches(text, pattern) {
+  return (text.match(pattern) ?? []).length;
+}
+
+function normalizeCodeForValidation(code) {
+  return code
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/\/\/.*$/gm, " ")
+    .replace(/"(?:\\.|[^"\\])*"/g, "\"\"")
+    .replace(/'(?:\\.|[^'\\])*'/g, "''")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function getAllTasks() {
   return sections.flatMap((section) => section.tasks);
 }
@@ -164,11 +1129,6 @@ function createDefaultTaskState() {
     };
   });
 
-  taskState.b1.completed = true;
-  taskState.b1.completionType = "verified";
-  taskState.b2.completed = true;
-  taskState.b2.completionType = "verified";
-
   return taskState;
 }
 
@@ -177,6 +1137,7 @@ function createDefaultScreenState() {
     currentView: "overview",
     activeSectionId: sections[0]?.id ?? null,
     activeTaskId: null,
+    activeHelpType: null,
     codeDrafts: {},
   };
 }
@@ -204,6 +1165,7 @@ function createIotCampScreen(container, options = {}) {
         currentStudentNumber: null,
         adminPanelOpen: false,
         adminAuthenticated: false,
+        adminPreviewActive: false,
         stars: 20,
         taskState: createDefaultTaskState(),
         screenState: createDefaultScreenState(),
@@ -217,17 +1179,18 @@ function createIotCampScreen(container, options = {}) {
         ...DEFAULT_CONFIG,
         ...(shouldResetConfig ? {} : (parsed.config ?? {})),
       };
-      const accounts = parsed.accounts ?? {};
-      const currentStudentNumber = parsed.currentStudentNumber ?? null;
+      const accounts = shouldResetConfig ? {} : (parsed.accounts ?? {});
+      const currentStudentNumber = shouldResetConfig ? null : (parsed.currentStudentNumber ?? null);
       const currentAccount = currentStudentNumber && accounts[currentStudentNumber]
         ? accounts[currentStudentNumber]
         : createDefaultAccountState();
 
       return {
-        authenticatedForDay: parsed.authenticatedForDay ?? null,
+        authenticatedForDay: shouldResetConfig ? null : (parsed.authenticatedForDay ?? null),
         currentStudentNumber,
         adminPanelOpen: false,
         adminAuthenticated: false,
+        adminPreviewActive: false,
         configVersion: CONFIG_VERSION,
         config,
         accounts,
@@ -256,6 +1219,7 @@ function createIotCampScreen(container, options = {}) {
         currentStudentNumber: null,
         adminPanelOpen: false,
         adminAuthenticated: false,
+        adminPreviewActive: false,
         stars: 20,
         taskState: createDefaultTaskState(),
         screenState: createDefaultScreenState(),
@@ -290,7 +1254,25 @@ function createIotCampScreen(container, options = {}) {
     });
   }
 
+  function sanitizeScreenState() {
+    const validSection = getSectionIndexById(state.screenState.activeSectionId) >= 0;
+    if (!validSection) {
+      state.screenState.activeSectionId = sections[0]?.id ?? null;
+    }
+
+    if (state.screenState.activeTaskId && !findTask(state.screenState.activeTaskId)) {
+      state.screenState.activeTaskId = null;
+      state.screenState.activeHelpType = null;
+      state.screenState.currentView = "overview";
+    }
+
+    if (!["code", "wiring", "solution", null].includes(state.screenState.activeHelpType ?? null)) {
+      state.screenState.activeHelpType = null;
+    }
+  }
+
   sanitizeLockedSectionProgress();
+  sanitizeScreenState();
   let toastTimer = null;
 
   function commitCurrentAccount() {
@@ -317,7 +1299,11 @@ function createIotCampScreen(container, options = {}) {
   }
 
   function isAuthenticated() {
-    return Boolean(state.currentStudentNumber) && state.authenticatedForDay === getTodayKey();
+    return state.adminPreviewActive || (Boolean(state.currentStudentNumber) && state.authenticatedForDay === getTodayKey());
+  }
+
+  function isAdminPreview() {
+    return Boolean(state.adminPreviewActive);
   }
 
   function loadAccount(studentNumber) {
@@ -333,6 +1319,7 @@ function createIotCampScreen(container, options = {}) {
       ...(storedAccount.screenState ?? {}),
     };
     sanitizeLockedSectionProgress();
+    sanitizeScreenState();
   }
 
   function getTaskState(taskId) {
@@ -368,12 +1355,40 @@ function createIotCampScreen(container, options = {}) {
     return sections.reduce((sum, _section, index) => sum + getTaskCounts(index).available, 0);
   }
 
+  function getCompletedCountFromTaskState(taskState) {
+    return getAllTasks().filter((task) => taskState?.[task.id]?.completed).length;
+  }
+
+  function getStudentStats() {
+    const totalTasks = getAllTasks().length;
+
+    return Array.from({ length: state.config.maxStudents }, (_item, index) => {
+      const studentNumber = String(index + 1);
+      const account = state.accounts[studentNumber] ?? createDefaultAccountState();
+      const completed = getCompletedCountFromTaskState(account.taskState);
+      const stars = Number.isFinite(account.stars) ? account.stars : 20;
+      const percent = totalTasks ? Math.round((completed / totalTasks) * 100) : 0;
+
+      return {
+        studentNumber,
+        completed,
+        totalTasks,
+        stars,
+        percent,
+      };
+    });
+  }
+
   function isSectionCompleted(sectionIndex) {
     const { total, completed } = getTaskCounts(sectionIndex);
     return total > 0 && total === completed;
   }
 
   function isSectionUnlocked(sectionIndex) {
+    if (isAdminPreview()) {
+      return true;
+    }
+
     if (sectionIndex === 0) {
       return true;
     }
@@ -382,6 +1397,10 @@ function createIotCampScreen(container, options = {}) {
   }
 
   function isTaskUnlocked(sectionIndex, taskIndex) {
+    if (isAdminPreview()) {
+      return true;
+    }
+
     if (!isSectionUnlocked(sectionIndex)) {
       return false;
     }
@@ -414,6 +1433,10 @@ function createIotCampScreen(container, options = {}) {
   }
 
   function getCodeDraft(taskId) {
+    if (isAdminPreview()) {
+      return state.screenState.codeDrafts?.[taskId] ?? getTaskSolution(taskId);
+    }
+
     return state.screenState.codeDrafts?.[taskId] ?? "";
   }
 
@@ -423,6 +1446,63 @@ function createIotCampScreen(container, options = {}) {
       [taskId]: value,
     };
     saveState();
+  }
+
+  function openHelp(taskId, type) {
+    if (state.screenState.activeTaskId !== taskId) {
+      return;
+    }
+
+    state.screenState.activeHelpType = type;
+    saveState();
+    render();
+  }
+
+  function closeHelp() {
+    state.screenState.activeHelpType = null;
+    saveState();
+    render();
+  }
+
+  function getTaskSolution(taskId) {
+    return TASK_SOLUTIONS[taskId] ?? "";
+  }
+
+  function getTaskPosition(taskId) {
+    for (let sectionIndex = 0; sectionIndex < sections.length; sectionIndex += 1) {
+      const taskIndex = sections[sectionIndex].tasks.findIndex((task) => task.id === taskId);
+      if (taskIndex >= 0) {
+        return { sectionIndex, taskIndex };
+      }
+    }
+
+    return null;
+  }
+
+  function getAdjacentTaskId(taskId, direction) {
+    const position = getTaskPosition(taskId);
+
+    if (!position) {
+      return null;
+    }
+
+    const allTasks = sections.flatMap((section, sectionIndex) => section.tasks.map((task, taskIndex) => ({
+      id: task.id,
+      sectionIndex,
+      taskIndex,
+    })));
+    const currentIndex = allTasks.findIndex((task) => task.id === taskId);
+    const adjacent = allTasks[currentIndex + direction];
+
+    if (!adjacent) {
+      return null;
+    }
+
+    if (direction > 0 && !canOpenTask(adjacent.sectionIndex, adjacent.taskIndex)) {
+      return null;
+    }
+
+    return adjacent.id;
   }
 
   function hasCodeDraft(taskId) {
@@ -436,16 +1516,123 @@ function createIotCampScreen(container, options = {}) {
       return false;
     }
 
-    const normalized = code.toLowerCase();
-    const hasSetup = normalized.includes("setup");
-    const hasLoop = normalized.includes("loop");
+    const normalized = normalizeCodeForValidation(code);
+    const hasSetup = /\bsetup\s*\(/.test(normalized);
+    const hasLoop = /\bloop\s*\(/.test(normalized);
     const hasArduinoAction = normalized.includes("digitalwrite")
       || normalized.includes("digitalread")
       || normalized.includes("analogread")
+      || normalized.includes("analogwrite")
       || normalized.includes("pinmode")
-      || normalized.includes("serial.");
+      || normalized.includes("serial.")
+      || normalized.includes("servo");
+    const baseArduinoShape = hasSetup && hasLoop && hasArduinoAction;
 
-    return hasSetup && hasLoop && hasArduinoAction;
+    if (!baseArduinoShape) {
+      return false;
+    }
+
+    const taskSpecificChecks = {
+      "beginner-led": () => {
+        const readsInput = countMatches(normalized, /digitalread\s*\(/g) >= 1;
+        const writesOutput = normalized.includes("digitalwrite");
+        const hasCondition = hasAny(normalized, ["if(", "if (", "?", " else "]);
+        return readsInput && writesOutput && hasCondition;
+      },
+      "beginner-potentiometer": () => {
+        return countMatches(normalized, /analogread\s*\(/g) >= 1
+          && hasAny(normalized, ["serial.begin", "serial.println", "serial.print"]);
+      },
+      "beginner-and-or": () => {
+        const reads = countMatches(normalized, /digitalread\s*\(/g);
+        const writes = countMatches(normalized, /digitalwrite\s*\(/g);
+        const hasLogic = hasAny(normalized, ["&&", "||"]);
+        return reads >= 2 && writes >= 1 && hasLogic;
+      },
+      "beginner-traffic-light": () => {
+        const outputWrites = countMatches(normalized, /digitalwrite\s*\(/g);
+        const delays = countMatches(normalized, /delay\s*\(/g);
+        return outputWrites >= 3 && delays >= 2;
+      },
+      "beginner-buzzer-button": () => {
+        const buttonReads = countMatches(normalized, /digitalread\s*\(/g);
+        const hasSound = hasAny(normalized, ["tone(", "notone(", "digitalwrite("]);
+        return buttonReads >= 1 && hasSound && hasAny(normalized, ["if(", "if ("]);
+      },
+      "beginner-light-sensor": () => {
+        const lightRead = countMatches(normalized, /analogread\s*\(/g) >= 1;
+        const ledReaction = hasAny(normalized, ["digitalwrite(", "analogwrite("]);
+        return lightRead && ledReaction && hasAny(normalized, ["if(", "if ("]);
+      },
+      "advanced-stair-light": () => {
+        const reads = countMatches(normalized, /digitalread\s*\(/g);
+        const hasTiming = hasAny(normalized, ["millis(", "delay("]);
+        return reads >= 2 && hasTiming && hasAny(normalized, ["if(", "if ("]);
+      },
+      "advanced-crosswalk": () => {
+        const outputWrites = countMatches(normalized, /digitalwrite\s*\(/g);
+        const inputReads = countMatches(normalized, /digitalread\s*\(/g);
+        return outputWrites >= 4 && inputReads >= 1 && hasAny(normalized, ["if(", "if ("]);
+      },
+      "advanced-parking": () => {
+        const hasDistanceMeasure = hasAny(normalized, ["pulsein(", "ultrasonic", "distance", "readultrasonicdistance"]);
+        const hasReaction = hasAny(normalized, ["digitalwrite(", "tone(", "serial.println", "serial.print"]);
+        return hasDistanceMeasure && hasReaction;
+      },
+      "advanced-motion": () => {
+        return countMatches(normalized, /digitalread\s*\(/g) >= 1
+          && hasAny(normalized, ["if(", "if (", "serial.println", "serial.print", "digitalwrite("]);
+      },
+      "advanced-temperature-alarm": () => {
+        const tempRead = countMatches(normalized, /analogread\s*\(/g) >= 1;
+        const hasDecision = hasAny(normalized, ["if(", "if (", " else "]);
+        const hasAlarmOutput = hasAny(normalized, ["digitalwrite(", "analogwrite(", "tone(", "serial.println", "serial.print"]);
+        return tempRead && hasDecision && hasAlarmOutput;
+      },
+      "advanced-counter": () => {
+        const reads = countMatches(normalized, /digitalread\s*\(/g);
+        const hasCounterChange = hasAny(normalized, ["++", "--", "+=", "-="]);
+        const hasSerialOutput = hasAny(normalized, ["serial.println", "serial.print"]);
+        return reads >= 2 && hasCounterChange && hasSerialOutput;
+      },
+      "expert-servo": () => {
+        return hasAll(normalized, ["servo", "attach", "write"])
+          && hasAny(normalized, ["analogread(", "map("]);
+      },
+      "expert-servo-loop": () => {
+        const hasLooping = hasAny(normalized, ["while(", "for("]);
+        return hasAll(normalized, ["servo", "attach", "write"]) && hasLooping;
+      },
+      "expert-rgb-loop": () => {
+        const analogReads = countMatches(normalized, /analogread\s*\(/g);
+        const analogWrites = countMatches(normalized, /analogwrite\s*\(/g);
+        return analogReads >= 3 && analogWrites >= 3;
+      },
+      "expert-reaction-game": () => {
+        const hasDelayOrTime = hasAny(normalized, ["random(", "millis(", "delay("]);
+        const hasButtonRead = countMatches(normalized, /digitalread\s*\(/g) >= 1;
+        const hasOutputReaction = hasAny(normalized, ["digitalwrite(", "serial.println", "serial.print"]);
+        return hasDelayOrTime && hasButtonRead && hasOutputReaction;
+      },
+      "expert-led-roulette": () => {
+        const outputWrites = countMatches(normalized, /digitalwrite\s*\(/g);
+        const hasLooping = hasAny(normalized, ["for(", "while("]);
+        return outputWrites >= 2 && hasLooping && hasAny(normalized, ["random(", "delay("]);
+      },
+      "expert-arduino-piano": () => {
+        const buttonReads = countMatches(normalized, /digitalread\s*\(/g);
+        const hasToneControl = hasAny(normalized, ["tone(", "notone("]);
+        return buttonReads >= 2 && hasToneControl && hasAny(normalized, ["if(", "if ("]);
+      },
+      "expert-smart-barrier": () => {
+        const hasServoControl = hasAll(normalized, ["servo", "attach", "write"]);
+        const hasDistanceMeasure = hasAny(normalized, ["pulsein(", "distance", "readultrasonicdistance"]);
+        return hasServoControl && hasDistanceMeasure && hasAny(normalized, ["if(", "if ("]);
+      },
+    };
+
+    const taskCheck = taskSpecificChecks[taskId];
+    return taskCheck ? taskCheck() : baseArduinoShape;
   }
 
   function syncCodeTextareaHeight(textarea) {
@@ -514,6 +1701,12 @@ function createIotCampScreen(container, options = {}) {
     state.screenState.currentView = "task";
     state.screenState.activeSectionId = sections[sectionIndex].id;
     state.screenState.activeTaskId = taskId;
+    state.screenState.activeHelpType = null;
+
+    if (isAdminPreview() && !state.screenState.codeDrafts?.[taskId]) {
+      setCodeDraft(taskId, getTaskSolution(taskId));
+    }
+
     saveState();
     render();
   }
@@ -521,6 +1714,7 @@ function createIotCampScreen(container, options = {}) {
   function backToOverview() {
     state.screenState.currentView = "overview";
     state.screenState.activeTaskId = null;
+    state.screenState.activeHelpType = null;
     saveState();
     render();
   }
@@ -528,6 +1722,7 @@ function createIotCampScreen(container, options = {}) {
   function backToSection() {
     state.screenState.currentView = "section";
     state.screenState.activeTaskId = null;
+    state.screenState.activeHelpType = null;
     saveState();
     render();
   }
@@ -540,8 +1735,13 @@ function createIotCampScreen(container, options = {}) {
       return;
     }
 
+    if (isAdminPreview()) {
+      openHelp(taskId, "code");
+      return;
+    }
+
     if ((taskProgress.openedHelp ?? []).includes("code")) {
-      showMessage("Napoveda ke kodu uz byla koupena.");
+      openHelp(taskId, "code");
       return;
     }
 
@@ -553,7 +1753,7 @@ function createIotCampScreen(container, options = {}) {
     state.stars -= state.config.helpCodeCost;
     taskProgress.openedHelp = Array.from(new Set([...(taskProgress.openedHelp ?? []), "code"]));
     saveState();
-    render();
+    openHelp(taskId, "code");
     showMessage("Napoveda ke kodu byla odemcena.");
   }
 
@@ -565,8 +1765,13 @@ function createIotCampScreen(container, options = {}) {
       return;
     }
 
+    if (isAdminPreview()) {
+      openHelp(taskId, "wiring");
+      return;
+    }
+
     if ((taskProgress.openedHelp ?? []).includes("wiring")) {
-      showMessage("Napoveda k zapojeni uz byla koupena.");
+      openHelp(taskId, "wiring");
       return;
     }
 
@@ -578,29 +1783,38 @@ function createIotCampScreen(container, options = {}) {
     state.stars -= state.config.helpWiringCost;
     taskProgress.openedHelp = Array.from(new Set([...(taskProgress.openedHelp ?? []), "wiring"]));
     saveState();
-    render();
+    openHelp(taskId, "wiring");
     showMessage("Napoveda k zapojeni byla odemcena.");
   }
 
-  function skipTask(taskId) {
+  function unlockSolution(taskId) {
     const taskProgress = getTaskState(taskId);
 
     if (!taskProgress || taskProgress.completed) {
-      showMessage("Preskoceni ted nelze pouzit.");
+      showMessage("Reseni ted nelze odemknout.");
+      return;
+    }
+
+    if (isAdminPreview()) {
+      openHelp(taskId, "solution");
+      return;
+    }
+
+    if ((taskProgress.openedHelp ?? []).includes("solution")) {
+      openHelp(taskId, "solution");
       return;
     }
 
     if (!hasEnoughStars(state.config.skipCost)) {
-      showMessage("Nemas dost hvezdicek na preskoceni.");
+      showMessage("Nemas dost hvezdicek na odkryti reseni.");
       return;
     }
 
     state.stars -= state.config.skipCost;
-    taskProgress.completed = true;
-    taskProgress.completionType = "skipped";
+    taskProgress.openedHelp = Array.from(new Set([...(taskProgress.openedHelp ?? []), "solution"]));
     saveState();
-    backToSection();
-    showMessage("Ukol byl preskocen bez zisku bodu.");
+    openHelp(taskId, "solution");
+    showMessage("Spravne reseni bylo odemceno.");
   }
 
   function completeTask(taskId) {
@@ -622,16 +1836,18 @@ function createIotCampScreen(container, options = {}) {
       return;
     }
 
-    const enteredPin = window.prompt("Zadej lektorsky PIN pro potvrzeni splneni:");
+    if (REQUIRE_LECTURER_PIN_FOR_CHECK) {
+      const enteredPin = window.prompt("Zadej lektorsky PIN pro potvrzeni splneni:");
 
-    if (enteredPin === null) {
-      showMessage("Potvrzeni bylo zruseno.", "info");
-      return;
-    }
+      if (enteredPin === null) {
+        showMessage("Potvrzeni bylo zruseno.", "info");
+        return;
+      }
 
-    if (!PREVIEW_ALLOW_ANY_PIN && enteredPin.trim() !== state.config.lecturerPin) {
-      showMessage("Lektorsky PIN neni spravny.", "error");
-      return;
+      if (!PREVIEW_ALLOW_ANY_PIN && enteredPin.trim() !== state.config.lecturerPin) {
+        showMessage("Lektorsky PIN neni spravny.", "error");
+        return;
+      }
     }
 
     taskProgress.completed = true;
@@ -665,6 +1881,23 @@ function createIotCampScreen(container, options = {}) {
     commitCurrentAccount();
     state.authenticatedForDay = null;
     state.currentStudentNumber = null;
+    state.adminPreviewActive = false;
+    state.screenState = createDefaultScreenState();
+    saveState();
+    render();
+  }
+
+  function enterAdminPreview() {
+    state.adminPreviewActive = true;
+    state.adminPanelOpen = false;
+    state.screenState = createDefaultScreenState();
+    saveState();
+    render();
+  }
+
+  function exitAdminPreview() {
+    state.adminPreviewActive = false;
+    state.adminPanelOpen = true;
     state.screenState = createDefaultScreenState();
     saveState();
     render();
@@ -708,8 +1941,28 @@ function createIotCampScreen(container, options = {}) {
           return;
         }
 
+        if (action === "enter-admin-preview") {
+          enterAdminPreview();
+          return;
+        }
+
+        if (action === "exit-admin-preview") {
+          exitAdminPreview();
+          return;
+        }
+
+        if (action === "logout-student") {
+          logoutStudent();
+          return;
+        }
+
         if (action === "back-to-section") {
           backToSection();
+          return;
+        }
+
+        if (action === "close-help") {
+          closeHelp();
           return;
         }
 
@@ -723,8 +1976,8 @@ function createIotCampScreen(container, options = {}) {
           return;
         }
 
-        if (action === "skip" && taskId) {
-          skipTask(taskId);
+        if (action === "show-solution" && taskId) {
+          unlockSolution(taskId);
           return;
         }
 
@@ -820,18 +2073,33 @@ function createIotCampScreen(container, options = {}) {
 
         const nextDailyPin = String(formData.get("nextDailyPin") ?? "").trim();
         const nextMaxStudents = Number(formData.get("nextMaxStudents") ?? "");
+        const didDailyPinChange = nextDailyPin && nextDailyPin !== state.config.dailyPin;
 
         if (nextDailyPin) {
           state.config.dailyPin = nextDailyPin;
         }
 
         if (Number.isFinite(nextMaxStudents) && nextMaxStudents > 0) {
-          state.config.maxStudents = nextMaxStudents;
+          state.config.maxStudents = Math.min(nextMaxStudents, MAX_STUDENTS_LIMIT);
+        }
+
+        if (didDailyPinChange) {
+          state.accounts = {};
+          state.authenticatedForDay = null;
+          state.currentStudentNumber = null;
+          state.stars = 20;
+          state.taskState = createDefaultTaskState();
+          state.screenState = createDefaultScreenState();
         }
 
         saveState();
         render();
-        showMessage("Admin nastaveni bylo ulozeno.", "success");
+        showMessage(
+          didDailyPinChange
+            ? "Admin nastaveni bylo ulozeno a studentske statistiky byly resetovany."
+            : "Admin nastaveni bylo ulozeno.",
+          "success",
+        );
       });
     }
 
@@ -986,7 +2254,7 @@ function createIotCampScreen(container, options = {}) {
       <section class="detail-card">
         <div class="detail-card__topbar">
           <button class="ghost-button" type="button" data-action="back-to-overview">Zpet na prehled</button>
-          <span class="detail-card__badge">${escapeHtml(section.title)}</span>
+          <span class="detail-card__badge detail-card__badge--${section.accent}">${escapeHtml(section.title)}</span>
         </div>
         <h2>${escapeHtml(section.title)}</h2>
         <p class="detail-card__meta">${escapeHtml(section.subtitle)}</p>
@@ -1014,16 +2282,83 @@ function createIotCampScreen(container, options = {}) {
     const sectionIndex = findSectionIndexByTaskId(taskId);
     const section = sections[sectionIndex];
     const openedHelp = taskProgress.openedHelp ?? [];
-    const canBuyCodeHelp = !taskProgress.completed && !openedHelp.includes("code") && hasEnoughStars(state.config.helpCodeCost);
-    const canBuyWiringHelp = !taskProgress.completed && !openedHelp.includes("wiring") && hasEnoughStars(state.config.helpWiringCost);
-    const canSkipTask = !taskProgress.completed && hasEnoughStars(state.config.skipCost);
+    const hasCodeHelp = openedHelp.includes("code");
+    const hasWiringHelp = openedHelp.includes("wiring");
+    const hasSolutionHelp = openedHelp.includes("solution");
+    const codeHelpDisabled = isAdminPreview()
+      ? false
+      : taskProgress.completed
+      ? !hasCodeHelp
+      : !hasCodeHelp && !hasEnoughStars(state.config.helpCodeCost);
+    const wiringHelpDisabled = isAdminPreview()
+      ? false
+      : taskProgress.completed
+      ? !hasWiringHelp
+      : !hasWiringHelp && !hasEnoughStars(state.config.helpWiringCost);
+    const solutionDisabled = isAdminPreview()
+      ? false
+      : taskProgress.completed
+      ? !hasSolutionHelp
+      : !hasSolutionHelp && !hasEnoughStars(state.config.skipCost);
     const codeDraft = getCodeDraft(task.id);
     const canSubmitCode = codeDraft.trim().length > 0 && !taskProgress.completed;
-    const statusText = taskProgress.completed
+    const activeHelpType = state.screenState.activeHelpType ?? null;
+    const statusText = isAdminPreview()
+      ? "Admin nahled"
+      : taskProgress.completed
       ? taskProgress.completionType === "skipped"
         ? "Splneno preskocenim"
         : "Splneno lektorem"
       : "Pripraveno";
+    const goalsMarkup = (task.goals ?? []).map((goal) => `<li>${escapeHtml(goal)}</li>`).join("");
+    const activeHelpContent = activeHelpType === "code"
+      ? (task.codeHelp ?? [])
+      : activeHelpType === "wiring"
+        ? (task.wiringHelp ?? [])
+        : [];
+    const activeHelpTitle = activeHelpType === "code"
+      ? "Napoveda ke kodu"
+      : activeHelpType === "wiring"
+        ? "Napoveda k zapojeni"
+        : "Spravne reseni";
+    const activeSolution = activeHelpType === "solution" ? getTaskSolution(task.id) : "";
+    const previousTaskId = getAdjacentTaskId(task.id, -1);
+    const nextTaskId = getAdjacentTaskId(task.id, 1);
+    const activeHelpMarkup = activeHelpType ? `
+      <section class="help-panel">
+        <div class="help-panel__top">
+          <div>
+            <p class="eyebrow">NAPOVEDA</p>
+            <h3>${activeHelpTitle}</h3>
+          </div>
+          <button class="ghost-button" type="button" data-action="close-help">Zavrit</button>
+        </div>
+        <p class="help-panel__meta">Reference z tveho zadani pro ukol ${escapeHtml(task.title)}.</p>
+        <div class="help-panel__hero">
+          <strong>${escapeHtml(task.imageLabel ?? "Referencni zapojeni")}</strong>
+          <span>${activeHelpType === "solution" ? "Tady je kompletni textove reseni, ktere muzete pouzit po slozeni bloku v Tinkercadu." : "Originalni obrazek sem muzu vlozit presne, jakmile ho budeme mit jako soubor v projektu."}</span>
+        </div>
+        ${activeHelpType === "solution" ? `
+          <pre class="solution-code"><code>${escapeHtml(activeSolution)}</code></pre>
+        ` : `
+          <ol class="help-panel__steps">
+            ${activeHelpContent.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+          </ol>
+        `}
+      </section>
+    ` : "";
+    const wiringPreviewMarkup = task.imageSrc ? `
+      <div class="detail-card__wiring-preview">
+        <img src="${escapeHtml(task.imageSrc)}" alt="${escapeHtml(task.imageAlt ?? task.imageLabel ?? `Zapojeni pro ukol ${task.title}`)}">
+      </div>
+    ` : `
+      <div class="detail-card__placeholder">
+        <div class="detail-card__placeholder-copy">
+          <strong>${escapeHtml(task.imageLabel ?? "Referencni zapojeni")}</strong>
+          <span>Jakmile pridame screenshot z prezentace nebo obrazek zapojeni do projektu, zobrazi se tady primo v detailu ukolu.</span>
+        </div>
+      </div>
+    `;
 
     return `
       <section class="detail-card">
@@ -1033,28 +2368,31 @@ function createIotCampScreen(container, options = {}) {
             <details class="help-menu">
               <summary>Napoveda</summary>
               <div class="help-menu__content">
-                <button type="button" data-action="hint" data-task-id="${task.id}" ${canBuyCodeHelp ? "" : "disabled"}>
-                  <span>Kod</span>
-                  <span class="help-menu__price">&#9733; ${state.config.helpCodeCost}</span>
+                <button type="button" data-action="hint" data-task-id="${task.id}" ${codeHelpDisabled ? "disabled" : ""}>
+                  <span>${hasCodeHelp || isAdminPreview() ? "Kod - otevrit" : "Kod"}</span>
+                  <span class="help-menu__price">${isAdminPreview() ? "ADMIN" : `&#9733; ${state.config.helpCodeCost}`}</span>
                 </button>
-                <button type="button" data-action="wiring-help" data-task-id="${task.id}" ${canBuyWiringHelp ? "" : "disabled"}>
-                  <span>Zapojeni</span>
-                  <span class="help-menu__price">&#9733; ${state.config.helpWiringCost}</span>
+                <button type="button" data-action="wiring-help" data-task-id="${task.id}" ${wiringHelpDisabled ? "disabled" : ""}>
+                  <span>${hasWiringHelp || isAdminPreview() ? "Zapojeni - otevrit" : "Zapojeni"}</span>
+                  <span class="help-menu__price">${isAdminPreview() ? "ADMIN" : `&#9733; ${state.config.helpWiringCost}`}</span>
                 </button>
-                <button type="button" data-action="skip" data-task-id="${task.id}" ${canSkipTask ? "" : "disabled"}>
-                  <span>Preskocit</span>
-                  <span class="help-menu__price">&#9733; ${state.config.skipCost}</span>
+                <button type="button" data-action="show-solution" data-task-id="${task.id}" ${solutionDisabled ? "disabled" : ""}>
+                  <span>${hasSolutionHelp || isAdminPreview() ? "Reseni - otevrit" : "Preskocit"}</span>
+                  <span class="help-menu__price">${isAdminPreview() ? "ADMIN" : `&#9733; ${state.config.skipCost}`}</span>
                 </button>
               </div>
             </details>
             <span class="detail-card__stars">&#9733; ${state.stars}</span>
-            <span class="detail-card__badge">${escapeHtml(section.title)}</span>
+            <span class="detail-card__badge detail-card__badge--${section.accent}">${escapeHtml(section.title)}</span>
           </div>
         </div>
         <p class="detail-card__section">${escapeHtml(section.title)}</p>
         <h2>${escapeHtml(task.title)}</h2>
         <p class="detail-card__meta">Hvezdicky za splneni: ${task.points}</p>
         <p class="detail-card__meta">Stav: ${statusText}</p>
+        <ul class="task-goals">
+          ${goalsMarkup}
+        </ul>
         <div class="task-structure">
           <div class="task-structure__card">
             <strong>1. Zapojeni obvodu</strong>
@@ -1065,8 +2403,9 @@ function createIotCampScreen(container, options = {}) {
             <p>Potom vytvori nebo upravi program, ktery bude s obvodem pracovat.</p>
           </div>
         </div>
-        <div class="detail-card__placeholder">Placeholder pro obrazek / zadani ukolu</div>
+        ${wiringPreviewMarkup}
         <p>${escapeHtml(task.description)}</p>
+        ${activeHelpMarkup}
         <div class="code-check-panel">
           <label class="code-check-panel__label" for="code-submission">Kod pro kontrolu</label>
           <textarea
@@ -1087,11 +2426,32 @@ function createIotCampScreen(container, options = {}) {
             ${canSubmitCode ? "" : "disabled"}
           >Zkontrolovat</button>
         </div>
+        <div class="task-nav">
+          <button type="button" class="ghost-button task-nav__button" data-action="open-task" data-task-id="${previousTaskId ?? ""}" ${previousTaskId ? "" : "disabled"}>&larr; Predchozi</button>
+          <button type="button" class="ghost-button task-nav__button" data-action="open-task" data-task-id="${nextTaskId ?? ""}" ${nextTaskId ? "" : "disabled"}>Dalsi &rarr;</button>
+        </div>
       </section>
     `;
   }
 
   function renderLogin() {
+    const adminStats = getStudentStats();
+    const adminStatsMarkup = adminStats.map((student) => `
+      <div class="admin-stats-row">
+        <div class="admin-stats-row__top">
+          <strong>Student ${escapeHtml(student.studentNumber)}</strong>
+          <span>${student.completed}/${student.totalTasks} ukolu</span>
+        </div>
+        <div class="admin-stats-row__bar">
+          <span style="width:${student.percent}%"></span>
+        </div>
+        <div class="admin-stats-row__meta">
+          <span>${student.percent}% hotovo</span>
+          <span>&#9733; ${student.stars}</span>
+        </div>
+      </div>
+    `).join("");
+
     container.innerHTML = `
       <section class="login-screen">
         <div class="login-card ${state.adminPanelOpen ? "login-card--admin" : ""}">
@@ -1104,14 +2464,32 @@ function createIotCampScreen(container, options = {}) {
             <section class="admin-panel admin-panel--full">
               <p class="eyebrow">ADMIN</p>
               ${state.adminAuthenticated ? `
-                <h1>Nastaveni dne</h1>
-                <p class="admin-panel__note">Po ulozeni budou studenti moci zadat jen cisla od 1 do nastaveneho poctu studentu.</p>
-                <form data-role="admin-form" class="login-form login-form--stack">
-                  <input name="nextDailyPin" type="text" autocomplete="off" placeholder="PIN na tento den" value="${escapeHtml(state.config.dailyPin)}" required>
-                  <input name="nextMaxStudents" type="number" min="1" step="1" autocomplete="off" placeholder="Pocet studentu" value="${state.config.maxStudents}" required>
-                  <button type="submit">Ulozit nastaveni dne</button>
-                </form>
-                <p data-role="admin-message" aria-live="polite"></p>
+                <div class="admin-layout">
+                  <div class="admin-layout__main">
+                    <h1>Nastaveni dne</h1>
+                    <p class="admin-panel__note">Po ulozeni budou studenti moci zadat jen cisla od 1 do nastaveneho poctu studentu.</p>
+                    <form data-role="admin-form" class="login-form login-form--stack">
+                      <input name="nextDailyPin" type="text" autocomplete="off" placeholder="PIN na tento den" value="${escapeHtml(state.config.dailyPin)}" required>
+                      <input name="nextMaxStudents" type="number" min="1" max="${MAX_STUDENTS_LIMIT}" step="1" autocomplete="off" placeholder="Pocet studentu" value="${state.config.maxStudents}" required>
+                      <button type="submit">Ulozit nastaveni dne</button>
+                    </form>
+                    <div class="admin-panel__actions">
+                      <button type="button" data-action="enter-admin-preview">Vstoupit jako admin</button>
+                    </div>
+                    <p class="admin-panel__note">V admin nahledu uvidis vsechny sekce, vsechny ukoly a reseni bez odemykani.</p>
+                    <p data-role="admin-message" aria-live="polite"></p>
+                  </div>
+                  <aside class="admin-stats">
+                    <div class="admin-stats__top">
+                      <h2>Statistika</h2>
+                      <span>${state.config.maxStudents} studentu</span>
+                    </div>
+                    <p class="admin-panel__note">Prehled postupu vsech studentu podle poctu splnenych ukolu.</p>
+                    <div class="admin-stats__list">
+                      ${adminStatsMarkup}
+                    </div>
+                  </aside>
+                </div>
               ` : `
                 <h1>Prihlaseni admina</h1>
                 <p class="admin-panel__note">Zadej admin PIN a otevres dalsi okno s nastavenim denniho PINu a poctu studentu.</p>
@@ -1160,6 +2538,15 @@ function createIotCampScreen(container, options = {}) {
 
     container.innerHTML = `
       <section class="dashboard-shell">
+        <div class="app-shell__corner">
+          <button type="button" class="ghost-button app-shell__back-button" data-action="logout-student">&larr; Zpet</button>
+        </div>
+        ${isAdminPreview() ? `
+          <div class="admin-preview-banner">
+            <strong>Admin nahled</strong>
+            <button type="button" class="ghost-button" data-action="exit-admin-preview">Zpet do adminu</button>
+          </div>
+        ` : ""}
         ${bodyContent}
         <div class="toast" data-role="action-message" hidden></div>
       </section>

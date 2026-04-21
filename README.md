@@ -4,17 +4,22 @@ Tento projekt neni finalni samostatny web. Je to lokalni preview noveho screenu,
 
 Aktualni zamer:
 - screen bude slouzit pro uceni deti na tabore praci s IoT,
-- deti budou prochazet ukoly, sbirat body a pouzivat je na napovedy nebo dalsi odmeny,
-- konkretni obsah ukolu zatim neni zadany a doplni se pozdeji.
+- deti budou prochazet ukoly, sbirat hvezdicky a pouzivat je na napovedy nebo dalsi odmeny,
+- konkretni Arduino ukoly jsou uz rozrazene podle obtiznosti a lze je dal upravovat.
 
 Aktualne pripravena kostra:
 - 3 sekce: `Zacatecnik`, `Pokrocily`, `Expert`,
 - screen je prepsany na logiku ve stylu Duolingo,
 - kazda sekce ma svoji cestu s uzly, na ktere se postupne proklikava,
 - detail jednoho ukolu se otevira zvlast, ne jako dlouhy seznam vsech ukolu na jedne strance,
-- body a postup se ukladaji do `localStorage`,
+- hvezdicky a postup se ukladaji do `localStorage`,
 - screen je zapouzdreny do `window.IotCampScreen.mount(...)`,
 - lokalni preview se spousti pres `index.html`.
+
+Aktualni sada ukolu:
+- `Zacatecnik`: `LED`, `Potenciometr`, `AND - OR`, `Semafor`, `Tlacitko + buzzer`, `Nocni svetlo`,
+- `Pokrocily`: `Schodistove svetlo`, `Semafor + prechod`, `Parkovaci system`, `Detekce pohybu`, `Teplotni alarm`, `Pocitadlo + a -`,
+- `Expert`: `Servo motor`, `Loop servo`, `Loop RGB`, `Reakcni hra`, `LED ruleta`, `Arduino piano`, `Automaticka zavora`.
 
 Pravidla funkcionality:
 - vstup na screen je chranen dennim PINem,
@@ -25,10 +30,11 @@ Pravidla funkcionality:
 - body bude mozne utratit za napovedu, preskoceni ukolu a dalsi veci,
 - obchod pro body ma uz pripravenou kostru i misto pro dalsi odmeny.
 
-Co je ted zamerne prazdne:
-- konkretni ukoly pro jednotlive sekce,
-- texty zadani, obrazky a skutecne napovedy,
-- konkretni dalsi odmeny v obchodu mimo napovedu a preskoceni.
+Napovedy:
+- `Kod` a `Zapojeni` se kupuji za hvezdicky,
+- po odemceni se v detailu ukolu otevre obsah napovedy,
+- texty napoved jsou odvozene ze zadani a screenshotu, ktere byly poslany pri navrhu,
+- originalni obrazky zapojeni bude nejpresnejsi doplnit az jako soubory primo do projektu.
 
 Konfigurace:
 - docasne PINy jsou zamerne jen zastupne hodnoty v `app.js`,
